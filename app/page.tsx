@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 /* ── Arch SVG ── */
 function Arch({ size = 260, strokeColor = "#2e3491", className = "" }: { size?: number; strokeColor?: string; className?: string }) {
@@ -27,14 +28,14 @@ function Arch({ size = 260, strokeColor = "#2e3491", className = "" }: { size?: 
 }
 
 /* ── Countdown ── */
-function useCountdown(target: Date) {
+function useCountdown(targetMs: number) {
   const [diff, setDiff] = useState(0);
   useEffect(() => {
-    const tick = () => setDiff(Math.max(0, target.getTime() - Date.now()));
+    const tick = () => setDiff(Math.max(0, targetMs - Date.now()));
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, [target]);
+  }, [targetMs]);
   const s = Math.floor(diff / 1000);
   return {
     days: Math.floor(s / 86400),
@@ -65,12 +66,10 @@ function Nav() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "nav-scrolled shadow-lg" : "nav-blur"}`}>
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
-        <div className="flex items-center gap-3">
-          <div style={{ background: "#1a1f6e", borderRadius: 8 }} className="w-8 h-8 flex items-center justify-center">
-            <span style={{ color: "#00e5a0", fontWeight: 900, fontSize: "0.85rem" }}>CF</span>
-          </div>
-          <span style={{ fontWeight: 800, color: "#fff", fontSize: "1rem", letterSpacing: "-0.01em", textShadow: "0 1px 4px rgba(0,0,0,0.2)" }}>
-            CodeFest <span style={{ color: "#00e5a0" }}>&apos;26</span>
+        <div className="flex items-center gap-2">
+          <Image src="/logo.png" alt="CodeFest '26 Logo" width={36} height={36} style={{ filter: "brightness(0) invert(1)" }} />
+          <span style={{ fontWeight: 800, color: "#fff", fontSize: "1rem", letterSpacing: "-0.01em", textShadow: "0 1px 4px rgba(0,0,0,0.2)", fontFamily: "'Mokoto', monospace" }}>
+            CODEFEST <span style={{ color: "#00e5a0" }}>&apos;26</span>
           </span>
         </div>
 
@@ -111,10 +110,11 @@ function Nav() {
   );
 }
 
+const REGISTRATION_OPEN_MS = new Date("2026-08-10T00:00:00").getTime();
+
 /* ── Main ── */
 export default function Page() {
-  const registrationOpen = new Date("2026-08-10T00:00:00");
-  const countdown = useCountdown(registrationOpen);
+  const countdown = useCountdown(REGISTRATION_OPEN_MS);
 
   const phases = [
     { num: "01", name: "Registration", date: "10 Aug – 19 Sep 2026", desc: "Form your team of 3–4 and sign up via the online portal. All Malaysian universities welcome." },
@@ -160,8 +160,11 @@ export default function Page() {
 
         <div className="max-w-6xl mx-auto px-6 w-full" style={{ position: "relative", zIndex: 2 }}>
           {/* Top label */}
-          <div style={{ color: "rgba(255,255,255,0.9)", fontWeight: 700, fontSize: "0.85rem", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "24px" }}>
-            SYNTECH ORGANISATION
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
+            <Image src="/logo.png" alt="CodeFest '26 Logo" width={48} height={48} style={{ filter: "brightness(0) invert(1)" }} />
+            <span style={{ color: "rgba(255,255,255,0.9)", fontWeight: 700, fontSize: "0.85rem", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+              SYNTECH ORGANISATION
+            </span>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "60px", alignItems: "center" }}>
@@ -478,8 +481,11 @@ export default function Page() {
         <div className="max-w-6xl mx-auto">
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "40px", marginBottom: "48px" }}>
             <div>
-              <div style={{ fontWeight: 900, fontSize: "1.2rem", marginBottom: "12px" }}>
-                CodeFest <span style={{ color: "#00e5a0" }}>&apos;26</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+                <Image src="/logo.png" alt="CodeFest '26 Logo" width={40} height={40} style={{ filter: "brightness(0) invert(1)" }} />
+                <span style={{ fontWeight: 900, fontSize: "1.1rem", fontFamily: "'Mokoto', monospace" }}>
+                  CODEFEST <span style={{ color: "#00e5a0" }}>&apos;26</span>
+                </span>
               </div>
               <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.75, fontSize: "0.875rem", maxWidth: "280px" }}>
                 Innovating for the People, by the People. A national-level coding competition by SYNTECH Organization at UTP.
