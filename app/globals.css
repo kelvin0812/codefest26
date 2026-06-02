@@ -1,26 +1,230 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --teal-start: #00c4cc;
+  --teal-end: #00e5a0;
+  --navy-deep: #1a1f6e;
+  --navy-mid: #2e3491;
+  --slate-banner: #243040;
+  --arch-stroke: #2e3491;
+  --white: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: #1a1f6e;
+  font-family: var(--font-inter), 'Inter', 'Segoe UI', system-ui, sans-serif;
+  overflow-x: hidden;
 }
+
+/* ── Hero gradient background ── */
+.hero-bg {
+  background: linear-gradient(135deg, #00c4cc 0%, #00d4aa 50%, #00e5a0 100%);
+  position: relative;
+}
+
+/* Binary pattern overlay */
+.hero-bg::before {
+  content: '1 0 1 1 0 0 1 0 1 1 0 1 0 0 1 1 0 1 0 1 1 0 0 1 0 1 0 1 1 0 0 1 0 1 1 0 1 0 0 1 1 0 1 0 1 1 0 0 1 0 1 0 1 1 0 0 1 0 1 1 0 1 0 0 1 1 0 1 0 1 1 0 0 1 0 1';
+  position: absolute;
+  inset: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.18);
+  word-break: break-all;
+  line-height: 1.9;
+  padding: 20px;
+  pointer-events: none;
+  overflow: hidden;
+  letter-spacing: 0.4em;
+}
+
+/* ── Nav ── */
+.nav-blur {
+  backdrop-filter: blur(14px);
+  background: rgba(0, 196, 204, 0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.nav-scrolled {
+  background: rgba(0, 60, 80, 0.85);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background: #1a1f6e;
+  color: #fff;
+  padding: 13px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background: #00c4cc;
+  color: #1a1f6e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 196, 204, 0.4);
+}
+
+.btn-outline {
+  border: 2px solid rgba(255,255,255,0.7);
+  color: #fff;
+  padding: 11px 30px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  display: inline-block;
+  cursor: pointer;
+  background: transparent;
+  text-decoration: none;
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: #fff;
+}
+
+/* ── Countdown ── */
+.countdown-box {
+  background: rgba(26, 31, 110, 0.85);
+  color: #fff;
+  border-radius: 14px;
+  padding: 20px 28px;
+  text-align: center;
+  min-width: 90px;
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+}
+.countdown-num {
+  font-size: 2.8rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.countdown-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  opacity: 0.6;
+  margin-top: 6px;
+}
+
+/* ── Phase cards ── */
+.phase-card {
+  border: 1px solid rgba(0,196,204,0.25);
+  border-radius: 16px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.phase-card:hover {
+  box-shadow: 0 12px 36px rgba(0, 196, 204, 0.2);
+  transform: translateY(-3px);
+}
+.phase-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00c4cc, #00e5a0);
+  border-radius: 16px 16px 0 0;
+}
+
+/* ── Prize cards ── */
+.prize-first {
+  background: linear-gradient(140deg, #00c4cc 0%, #00e5a0 100%);
+  color: #1a1f6e;
+  border-radius: 20px;
+  padding: 44px 32px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 196, 204, 0.45);
+  transform: scale(1.06);
+  position: relative;
+  z-index: 1;
+}
+.prize-runner {
+  background: #f0fdfb;
+  border: 2px solid #00c4cc;
+  border-radius: 20px;
+  padding: 36px 28px;
+  text-align: center;
+}
+.prize-third {
+  background: #f0fdfb;
+  border: 2px solid #b2eee9;
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+/* ── Stat box (in hero — glass) ── */
+.stat-box {
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 14px;
+  padding: 24px 20px;
+  text-align: center;
+  background: rgba(26, 31, 110, 0.75);
+  backdrop-filter: blur(10px);
+  color: #fff;
+}
+
+/* ── FAQ ── */
+.faq-item {
+  border-bottom: 1px solid #d0f5f0;
+}
+.faq-item summary {
+  padding: 20px 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1a1f6e;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item[open] summary { color: #008a8a; }
+.faq-body {
+  padding-bottom: 20px;
+  color: #555;
+  line-height: 1.75;
+  font-size: 0.95rem;
+}
+
+/* ── Section label ── */
+.section-eyebrow {
+  display: inline-block;
+  background: #e0faf6;
+  color: #007a7a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+}
+
+/* ── Arch animation ── */
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+.arch-float { animation: floatUp 6s ease-in-out infinite; }
+.arch-float-slow { animation: floatUp 9s ease-in-out infinite; }
+
+
