@@ -175,7 +175,7 @@ export default function Page() {
                 letterSpacing: "0.08em",
                 lineHeight: 1,
                 textTransform: "uppercase",
-                fontFamily: "'Courier New', monospace",
+                fontFamily: "'Mokoto', 'Courier New', monospace",
                 textShadow: "0 2px 16px rgba(0,0,0,0.15)",
                 marginBottom: "0",
               }}>
@@ -189,7 +189,7 @@ export default function Page() {
                 color: "#1a1f6e",
                 letterSpacing: "0.06em",
                 lineHeight: 1,
-                fontFamily: "'Courier New', monospace",
+                fontFamily: "'Mokoto', 'Courier New', monospace",
                 display: "flex",
                 alignItems: "center",
                 marginBottom: "16px",
