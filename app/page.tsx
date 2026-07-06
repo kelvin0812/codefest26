@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
 /* ── Arch SVG ── */
@@ -74,7 +74,7 @@ function Nav() {
         </div>
 
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-          {["About", "Timeline", "Prizes", "Schedule", "FAQ"].map((item) => (
+          {["About", "Timeline", "Prizes", "Schedule", "Workshops", "FAQ"].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
@@ -111,6 +111,181 @@ function Nav() {
 }
 
 const REGISTRATION_OPEN_MS = new Date("2026-08-10T00:00:00").getTime();
+
+/* ── Workshop Carousel ── */
+const workshops = [
+  { num: "01", title: "Workshop 1", desc: "Details coming soon" },
+  { num: "02", title: "Workshop 2", desc: "Details coming soon" },
+  { num: "03", title: "Workshop 3", desc: "Details coming soon" },
+  { num: "04", title: "Workshop 4", desc: "Details coming soon" },
+  { num: "05", title: "Workshop 5", desc: "Details coming soon" },
+];
+
+function WorkshopCarousel() {
+  const [current, setCurrent] = useState(0);
+
+  const prev = () => setCurrent((c) => (c === 0 ? workshops.length - 1 : c - 1));
+  const next = () => setCurrent((c) => (c === workshops.length - 1 ? 0 : c + 1));
+
+  const ws = workshops[current];
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "24px", justifyContent: "center" }}>
+      {/* Left arrow */}
+      <button
+        onClick={prev}
+        aria-label="Previous workshop"
+        style={{
+          width: "48px",
+          height: "48px",
+          borderRadius: "50%",
+          border: "2px solid #00c4cc",
+          background: "#fff",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "all 0.2s",
+          flexShrink: 0,
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = "#00c4cc"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#1a1f6e"; }}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </button>
+
+      {/* Card */}
+      <div style={{
+        flex: 1,
+        maxWidth: "520px",
+        background: "#fff",
+        border: "2px solid rgba(0,196,204,0.3)",
+        borderRadius: "20px",
+        padding: "48px 40px",
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+        transition: "box-shadow 0.3s",
+        boxShadow: "0 8px 32px rgba(0, 196, 204, 0.12)",
+      }}>
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "5px", background: "linear-gradient(90deg, #00c4cc, #00e5a0)", borderRadius: "20px 20px 0 0" }} />
+        <div style={{ fontSize: "4rem", fontWeight: 900, color: "#d0f7f3", lineHeight: 1, marginBottom: "16px", letterSpacing: "-0.04em" }}>{ws.num}</div>
+        <h3 style={{ fontSize: "1.4rem", fontWeight: 700, color: "#1a1f6e", marginBottom: "10px" }}>{ws.title}</h3>
+        <p style={{ fontSize: "1rem", color: "#666", lineHeight: 1.75 }}>{ws.desc}</p>
+
+        {/* Dots indicator */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginTop: "28px" }}>
+          {workshops.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              aria-label={`Go to workshop ${i + 1}`}
+              style={{
+                width: i === current ? "24px" : "8px",
+                height: "8px",
+                borderRadius: "100px",
+                border: "none",
+                background: i === current ? "#00c4cc" : "#d0f5f0",
+                cursor: "pointer",
+                transition: "all 0.3s",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Right arrow */}
+      <button
+        onClick={next}
+        aria-label="Next workshop"
+        style={{
+          width: "48px",
+          height: "48px",
+          borderRadius: "50%",
+          border: "2px solid #00c4cc",
+          background: "#fff",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "all 0.2s",
+          flexShrink: 0,
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = "#00c4cc"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#1a1f6e"; }}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+/* ── FAQ Accordion Item ── */
+function FaqItem({ question, answer }: { question: string; answer: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setHeight(contentRef.current.scrollHeight);
+    }
+  }, [answer]);
+
+  return (
+    <div className="faq-item">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          width: "100%",
+          padding: "20px 0",
+          cursor: "pointer",
+          fontWeight: 600,
+          fontSize: "1rem",
+          color: isOpen ? "#008a8a" : "#1a1f6e",
+          background: "none",
+          border: "none",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "16px",
+          textAlign: "left",
+          transition: "color 0.3s ease",
+        }}
+      >
+        <span>{question}</span>
+        <span
+          style={{
+            fontSize: "1.3rem",
+            color: "#00c4cc",
+            flexShrink: 0,
+            transition: "transform 0.3s ease",
+            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+            display: "inline-block",
+          }}
+        >
+          +
+        </span>
+      </button>
+      <div
+        style={{
+          overflow: "hidden",
+          transition: "max-height 0.4s ease, opacity 0.3s ease",
+          maxHeight: isOpen ? `${height}px` : "0px",
+          opacity: isOpen ? 1 : 0,
+        }}
+      >
+        <div ref={contentRef} className="faq-body">
+          {answer}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ── Main ── */
 export default function Page() {
@@ -429,6 +604,22 @@ export default function Page() {
         </div>
       </section>
 
+      {/* ── WORKSHOPS ── */}
+      <section id="workshops" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
+        <div className="max-w-4xl mx-auto">
+          <div style={{ textAlign: "center", marginBottom: "56px" }}>
+            <span className="section-eyebrow">Hands-On Learning</span>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
+              Workshops
+            </h2>
+            <p style={{ color: "#666", maxWidth: "540px", margin: "16px auto 0", lineHeight: 1.75 }}>
+              Sharpen your skills with 5 expert-led workshops designed to prepare you for the competition and beyond.
+            </p>
+          </div>
+          <WorkshopCarousel />
+        </div>
+      </section>
+
       {/* ── REGISTER CTA ── */}
       <section id="register" className="hero-bg" style={{ padding: "96px 24px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: -80, right: -100, opacity: 0.25, zIndex: 1 }} className="arch-float-slow">
@@ -455,6 +646,100 @@ export default function Page() {
         </div>
       </section>
 
+      {/* ── COLLABORATORS ── */}
+      <section id="collaborators" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
+        <div className="max-w-6xl mx-auto">
+          <div style={{ textAlign: "center", marginBottom: "56px" }}>
+            <span className="section-eyebrow">Our Partners</span>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
+              Collaborators
+            </h2>
+            <p style={{ color: "#666", maxWidth: "540px", margin: "16px auto 0", lineHeight: 1.75 }}>
+              Organizations and institutions who make CodeFest &apos;26 possible.
+            </p>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "32px", alignItems: "center" }}>
+            {["Collaborator 1", "Collaborator 2", "Collaborator 3", "Collaborator 4", "Collaborator 5"].map((name) => (
+              <div key={name} style={{ background: "#fff", border: "1px solid #b2eee9", borderRadius: "16px", padding: "32px 48px", textAlign: "center", minWidth: "180px" }}>
+                <div style={{ width: "80px", height: "80px", background: "#e8f9f7", borderRadius: "12px", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600 }}>Logo</span>
+                </div>
+                <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.9rem" }}>{name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SPONSORS ── */}
+      <section id="sponsors" style={{ padding: "96px 24px" }}>
+        <div className="max-w-6xl mx-auto">
+          <div style={{ textAlign: "center", marginBottom: "56px" }}>
+            <span className="section-eyebrow">Backed By The Best</span>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
+              Sponsors
+            </h2>
+          </div>
+
+          {/* Gold */}
+          <div style={{ marginBottom: "48px" }}>
+            <div style={{ textAlign: "center", marginBottom: "24px" }}>
+              <span style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1f6e", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                🥇 Gold Sponsors
+              </span>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "24px" }}>
+              {["Gold Sponsor 1"].map((name) => (
+                <div key={name} style={{ background: "#fff", border: "2px solid #FFD700", borderRadius: "16px", padding: "36px 56px", textAlign: "center", minWidth: "200px" }}>
+                  <div style={{ width: "100px", height: "100px", background: "#fffbe6", borderRadius: "12px", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600 }}>Logo</span>
+                  </div>
+                  <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.95rem" }}>{name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Silver */}
+          <div style={{ marginBottom: "48px" }}>
+            <div style={{ textAlign: "center", marginBottom: "24px" }}>
+              <span style={{ background: "linear-gradient(135deg, #C0C0C0, #A0A0A0)", color: "#fff", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                🥈 Silver Sponsors
+              </span>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "24px" }}>
+              {["Silver Sponsor 1", "Silver Sponsor 2"].map((name) => (
+                <div key={name} style={{ background: "#fff", border: "2px solid #C0C0C0", borderRadius: "16px", padding: "28px 44px", textAlign: "center", minWidth: "180px" }}>
+                  <div style={{ width: "80px", height: "80px", background: "#f5f5f5", borderRadius: "12px", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600 }}>Logo</span>
+                  </div>
+                  <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.9rem" }}>{name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bronze */}
+          <div>
+            <div style={{ textAlign: "center", marginBottom: "24px" }}>
+              <span style={{ background: "linear-gradient(135deg, #CD7F32, #A0522D)", color: "#fff", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                🥉 Bronze Sponsors
+              </span>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "24px" }}>
+              {["Bronze Sponsor 1", "Bronze Sponsor 2", "Bronze Sponsor 3"].map((name) => (
+                <div key={name} style={{ background: "#fff", border: "2px solid #CD7F32", borderRadius: "16px", padding: "24px 36px", textAlign: "center", minWidth: "160px" }}>
+                  <div style={{ width: "64px", height: "64px", background: "#fdf5ee", borderRadius: "12px", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600 }}>Logo</span>
+                  </div>
+                  <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.85rem" }}>{name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── FAQ ── */}
       <section id="faq" style={{ padding: "96px 24px" }}>
         <div className="max-w-3xl mx-auto">
@@ -464,13 +749,7 @@ export default function Page() {
           </div>
           <div>
             {faqs.map((faq, i) => (
-              <details key={i} className="faq-item">
-                <summary>
-                  <span>{faq.q}</span>
-                  <span style={{ fontSize: "1.3rem", color: "#00c4cc", flexShrink: 0 }}>+</span>
-                </summary>
-                <div className="faq-body">{faq.a}</div>
-              </details>
+              <FaqItem key={i} question={faq.q} answer={faq.a} />
             ))}
           </div>
         </div>
@@ -490,10 +769,40 @@ export default function Page() {
               <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.75, fontSize: "0.875rem", maxWidth: "280px" }}>
                 Innovating for the People, by the People. A national-level coding competition by SYNTECH Organization at UTP.
               </p>
+              {/* Social links */}
+              <div style={{ display: "flex", alignItems: "center", gap: "16px", marginTop: "20px" }}>
+                {/* CodeFest IG */}
+                <a href="https://www.instagram.com/codefestsyntech?igsh=emNhNG9xNTJreWNh" target="_blank" rel="noopener noreferrer" title="CodeFest Instagram" style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.6)", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#E1306C")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.1 4.1 0 011.522.99 4.1 4.1 0 01.99 1.522c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.1 4.1 0 01-.99 1.522 4.1 4.1 0 01-1.522.99c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.1 4.1 0 01-1.522-.99 4.1 4.1 0 01-.99-1.522c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.1 4.1 0 01.99-1.522 4.1 4.1 0 011.522-.99c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a6.27 6.27 0 00-2.265 1.474A6.27 6.27 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a6.27 6.27 0 001.474 2.265 6.27 6.27 0 002.265 1.474c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a6.27 6.27 0 002.265-1.474 6.27 6.27 0 001.474-2.265c.297-.762.5-1.635.558-2.913C23.986 15.667 24 15.259 24 12s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a6.27 6.27 0 00-1.474-2.265A6.27 6.27 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                  </svg>
+                  <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>CodeFest</span>
+                </a>
+                {/* SYNTECH IG */}
+                <a href="https://www.instagram.com/utpsyntech?igsh=MTFvbzlnOXNxeXZzMQ==" target="_blank" rel="noopener noreferrer" title="SYNTECH Instagram" style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.6)", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#E1306C")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.1 4.1 0 011.522.99 4.1 4.1 0 01.99 1.522c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.1 4.1 0 01-.99 1.522 4.1 4.1 0 01-1.522.99c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.1 4.1 0 01-1.522-.99 4.1 4.1 0 01-.99-1.522c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.1 4.1 0 01.99-1.522 4.1 4.1 0 011.522-.99c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a6.27 6.27 0 00-2.265 1.474A6.27 6.27 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a6.27 6.27 0 001.474 2.265 6.27 6.27 0 002.265 1.474c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a6.27 6.27 0 002.265-1.474 6.27 6.27 0 001.474-2.265c.297-.762.5-1.635.558-2.913C23.986 15.667 24 15.259 24 12s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a6.27 6.27 0 00-1.474-2.265A6.27 6.27 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                  </svg>
+                  <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>SYNTECH</span>
+                </a>
+                {/* SYNTECH LinkedIn */}
+                <a href="https://www.linkedin.com/company/syntech-organization/" target="_blank" rel="noopener noreferrer" title="SYNTECH LinkedIn" style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.6)", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#0A66C2")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                  <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>LinkedIn</span>
+                </a>
+              </div>
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.45, marginBottom: "16px" }}>Quick Links</div>
-              {["About", "Timeline", "Prizes", "Schedule", "FAQ"].map((link) => (
+              {["About", "Timeline", "Prizes", "Schedule", "Workshops", "FAQ"].map((link) => (
                 <a key={link} href={`#${link.toLowerCase()}`} style={{ display: "block", color: "rgba(255,255,255,0.55)", textDecoration: "none", marginBottom: "10px", fontSize: "0.875rem", transition: "color 0.2s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#00e5a0")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}>
