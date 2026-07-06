@@ -289,35 +289,6 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 
 /* ── Main ── */
 export default function Page() {
-  const countdown = useCountdown(REGISTRATION_OPEN_MS);
-
-  const phases = [
-    { num: "01", name: "Registration", date: "10 Aug – 19 Sep 2026", desc: "Form your team of 3–4 and sign up via the online portal. All Malaysian universities welcome." },
-    { num: "02", name: "Development & Submission", date: "20 Sep – 21 Oct 2026", desc: "Build your working prototype or MVP addressing a real societal challenge. Submit all files by 21 Oct." },
-    { num: "03", name: "Project Assessment", date: "22 – 28 Oct 2026", desc: "Judges evaluate submissions on creativity, technical skill, and real-world impact. Top teams proceed." },
-    { num: "04", name: "Grand Finale", date: "14 Nov 2026 · Nadi@UTP", desc: "Selected finalists pitch live to industry judges. Winners announced at the award ceremony." },
-  ];
-
-  const schedule = [
-    { time: "9:00 am", activity: "Arrival & Booth Setup", detail: "Finalists arrive and set up project booths" },
-    { time: "10:00 am", activity: "Public Exhibition", detail: "Open to students & public — live demos" },
-    { time: "11:30 am", activity: "Opening Ceremony", detail: "Judge introductions & pitching briefing" },
-    { time: "12:15 pm", activity: "Lunch & Networking", detail: "Judges, guests & participants mingle" },
-    { time: "1:30 pm", activity: "Final Pitching Session", detail: "Top teams present on stage to judges" },
-    { time: "4:00 pm", activity: "Judges' Deliberation", detail: "Final scoring while closing video plays" },
-    { time: "4:30 pm", activity: "Award Ceremony", detail: "Winners announced & prizes presented" },
-    { time: "5:00 pm", activity: "Wrap-Up", detail: "Group photo & event close" },
-  ];
-
-  const faqs = [
-    { q: "Who can participate in CodeFest '26?", a: "All undergraduate students from any Malaysian university. Teams must consist of 3 to 4 members." },
-    { q: "What is the registration fee?", a: "RM 30 per team. Registration opens on 10 August 2026 via our online portal." },
-    { q: "What kind of projects are expected?", a: "Functional prototypes or MVPs addressing societal challenges using AI, cloud computing, cybersecurity, or software engineering." },
-    { q: "Is the competition fully online?", a: "Preliminary phases are online. The Grand Finale on 14 November 2026 is a physical event at Nadi@UTP, Universiti Teknologi PETRONAS." },
-    { q: "What do winners receive?", a: "1st place RM 1,000 · 2nd place RM 700 · 3rd place RM 500 · People's Choice RM 100. All finishers receive a Certificate of Participation." },
-    { q: "Who organizes CodeFest '26?", a: "SYNTECH Organization at UTP, co-organised by the Department of Computing (DC), supported by Student Affairs (SA) and YUTP." },
-  ];
-
   return (
     <>
       <Nav />
