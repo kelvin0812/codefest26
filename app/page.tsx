@@ -289,6 +289,36 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 
 /* ── Main ── */
 export default function Page() {
+  const countdown = useCountdown(REGISTRATION_OPEN_MS);
+
+  const phases = [
+    { num: "01", name: "Registration", date: "10 Aug – 19 Sep 2026", desc: "Form your team of 3–4 and sign up via the online portal. All Malaysian universities welcome." },
+    { num: "02", name: "Development & Submission", date: "20 Sep – 21 Oct 2026", desc: "Build your working prototype or MVP addressing a real societal challenge. Submit all files by 21 Oct." },
+    { num: "03", name: "Project Assessment", date: "22 – 28 Oct 2026", desc: "Judges evaluate submissions on creativity, technical skill, and real-world impact. Top teams proceed." },
+    { num: "04", name: "Grand Finale", date: "14 Nov 2026 · Nadi@UTP", desc: "Selected finalists pitch live to industry judges. Winners announced at the award ceremony." },
+  ];
+
+  const schedule = [
+    { time: "9:00 am", activity: "Arrival & Booth Setup", detail: "Finalists arrive and set up project booths" },
+    { time: "10:00 am", activity: "Public Exhibition", detail: "Open to students & public — live demos" },
+    { time: "11:30 am", activity: "Opening Ceremony", detail: "Judge introductions & pitching briefing" },
+    { time: "12:15 pm", activity: "Lunch & Networking", detail: "Judges, guests & participants mingle" },
+    { time: "1:30 pm", activity: "Final Pitching Session", detail: "Top teams present on stage to judges" },
+    { time: "4:00 pm", activity: "Judges' Deliberation", detail: "Final scoring while closing video plays" },
+    { time: "4:30 pm", activity: "Award Ceremony", detail: "Winners announced & prizes presented" },
+    { time: "5:00 pm", activity: "Wrap-Up", detail: "Group photo & event close" },
+  ];
+
+  const faqs = [
+    { q: "Who can participate in CodeFest '26?", a: "All undergraduate students from any Malaysian university. Teams must consist of 3 to 4 members." },
+    { q: "What is the registration fee?", a: "RM 30 per team. Registration opens on 10 August 2026 via our online portal." },
+    { q: "What kind of projects are expected?", a: "Functional prototypes or MVPs addressing societal challenges using AI, cloud computing, cybersecurity, or software engineering." },
+    { q: "Is the competition fully online?", a: "Preliminary phases are online. The Grand Finale on 14 November 2026 is a physical event at Nadi@UTP, Universiti Teknologi PETRONAS." },
+    { q: "What do winners receive?", a: "1st place RM 1,000 · 2nd place RM 700 · 3rd place RM 500 · People's Choice RM 100. All finishers receive a Certificate of Participation." },
+    { q: "Who organizes CodeFest '26?", a: "SYNTECH Organization at UTP, co-organised by the Department of Computing (DC), supported by Student Affairs (SA) and YUTP." },
+    { q: "When is the track and rulebook will be released?", a: "Rulebook and track details will be released after the registration phase." },
+  ];
+
   return (
     <>
       <Nav />
@@ -343,20 +373,9 @@ export default function Page() {
                 alignItems: "center",
                 marginBottom: "16px",
               }}>
-                <span>2</span>
-                <span style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "0.82em",
-                  height: "0.82em",
-                  borderRadius: "50%",
-                  border: "0.09em solid #1a1f6e",
-                  position: "relative",
-                  margin: "0 0.02em",
-                }}>
-                  <span style={{ width: "0.3em", height: "0.3em", borderRadius: "50%", background: "#1a1f6e", display: "block" }} />
-                </span>
+                <span>20</span>
+              
+
                 <span>26</span>
               </div>
 
@@ -371,7 +390,7 @@ export default function Page() {
                 padding: "10px 20px",
                 marginBottom: "32px",
               }}>
-                Programming Event
+                UTP Annual Hackathon 1st Edition
               </div>
 
               <p style={{ color: "rgba(255,255,255,0.92)", lineHeight: 1.75, fontSize: "1.05rem", marginBottom: "36px", maxWidth: "420px" }}>
@@ -391,7 +410,7 @@ export default function Page() {
               <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                 {[
                   { icon: "📅", text: "10 Aug – 14 Nov 2026" },
-                  { icon: "📍", text: "Nadi@UTP, Perak" },
+                  { icon: "📍", text: "Nadi@UTP, UTP" },
                   { icon: "💰", text: "RM 30 / team" },
                 ].map(({ icon, text }) => (
                   <span key={text} style={{ background: "rgba(26,31,110,0.75)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "100px", padding: "7px 16px", fontSize: "0.8rem", fontWeight: 600, backdropFilter: "blur(8px)" }}>
@@ -417,7 +436,7 @@ export default function Page() {
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", width: "100%" }}>
                 {[
-                  { val: "RM 2,300", sub: "Total Prize Pool" },
+                  { val: "Coming Soon", sub: "Total Prize Pool" },
                   { val: "30 Teams", sub: "Max Capacity" },
                   { val: "3 Months", sub: "Competition Duration" },
                   { val: "National", sub: "Level Competition" },
@@ -521,19 +540,19 @@ export default function Page() {
             <div className="prize-runner">
               <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🥈</div>
               <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#009999", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>2nd Place</div>
-              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>RM 700</div>
+              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>Coming Soon</div>
               <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>+ Certificate</div>
             </div>
             <div className="prize-first">
               <div style={{ fontSize: "2.4rem", marginBottom: "14px" }}>🏆</div>
               <div style={{ fontSize: "0.68rem", fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.75, marginBottom: "8px" }}>Champion</div>
-              <div style={{ fontSize: "3.2rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1 }}>RM 1,000</div>
+              <div style={{ fontSize: "3.2rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1 }}>Coming Soon</div>
               <div style={{ fontSize: "0.8rem", marginTop: "10px", opacity: 0.75 }}>+ Plaque + Certificate</div>
             </div>
             <div className="prize-third">
               <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🥉</div>
               <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#1a1f6e", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>3rd Place</div>
-              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>RM 500</div>
+              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>Coming Soon</div>
               <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>+ Certificate</div>
             </div>
           </div>
@@ -541,7 +560,7 @@ export default function Page() {
             <div style={{ flex: 1, background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "24px", textAlign: "center" }}>
               <div style={{ fontSize: "1.6rem", marginBottom: "8px" }}>❤️</div>
               <div style={{ fontWeight: 700, color: "#1a1f6e", marginBottom: "4px" }}>People&apos;s Choice</div>
-              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#009999" }}>RM 100</div>
+              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#009999" }}>Coming Soon</div>
             </div>
             <div style={{ flex: 2, background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "24px", display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{ fontSize: "2rem" }}>📜</div>
@@ -612,12 +631,12 @@ export default function Page() {
               onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}>
               Register Your Team
             </a>
-            <a href="#" className="btn-outline">Download Rulebook</a>
+            {/* <a href="#" className="btn-outline">Download Rulebook</a>  */}
           </div>
         </div>
       </section>
 
-      {/* ── COLLABORATORS ── */}
+      {/* ── COLLABORATORS ──
       <section id="collaborators" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
         <div className="max-w-6xl mx-auto">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
@@ -640,19 +659,19 @@ export default function Page() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* ── SPONSORS ── */}
-      <section id="sponsors" style={{ padding: "96px 24px" }}>
+
+      {/* <section id="sponsors" style={{ padding: "96px 24px" }}>
         <div className="max-w-6xl mx-auto">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <span className="section-eyebrow">Backed By The Best</span>
             <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
               Sponsors
             </h2>
-          </div>
+          </div> */}
 
-          {/* Gold */}
+          {/* Gold
           <div style={{ marginBottom: "48px" }}>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <span style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1f6e", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
@@ -669,9 +688,9 @@ export default function Page() {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
-          {/* Silver */}
+          {/* Silver
           <div style={{ marginBottom: "48px" }}>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <span style={{ background: "linear-gradient(135deg, #C0C0C0, #A0A0A0)", color: "#fff", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
@@ -688,10 +707,10 @@ export default function Page() {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Bronze */}
-          <div>
+          {/* <div>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <span style={{ background: "linear-gradient(135deg, #CD7F32, #A0522D)", color: "#fff", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                 🥉 Bronze Sponsors
@@ -709,7 +728,7 @@ export default function Page() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── FAQ ── */}
       <section id="faq" style={{ padding: "96px 24px" }}>
