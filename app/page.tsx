@@ -151,7 +151,7 @@ function RegModal({ onClose }: { onClose: () => void }) {
         </h3>
         <p style={{ color: "#555", lineHeight: 1.75, fontSize: "0.95rem", marginBottom: "28px" }}>
           Registration for CodeFest &apos;26 will open on{" "}
-          <strong style={{ color: "#1a1f6e" }}>7th August 2026</strong>.
+          <strong style={{ color: "#1a1f6e" }}>10th August 2026</strong>.
           <br />Stay tuned — we&apos;ll see you there!
         </p>
 
@@ -162,7 +162,7 @@ function RegModal({ onClose }: { onClose: () => void }) {
           padding: "10px 28px", borderRadius: "100px",
           letterSpacing: "0.02em",
         }}>
-          7 August 2026
+          10 August 2026
         </div>
 
         <div style={{ marginTop: "24px" }}>
