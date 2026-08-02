@@ -74,7 +74,7 @@ function Nav({ onRegister }: { onRegister: () => void }) {
         </div>
 
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-          {["About", "Timeline", "Prizes", "Schedule", "Workshops", "FAQ"].map((item) => (
+          {["About", "Timeline", "Prizes", "Roadmap", "Workshops", "FAQ"].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
@@ -188,11 +188,130 @@ const REGISTRATION_OPEN_MS = new Date("2026-08-10T00:00:00").getTime();
 
 /* ── Workshop Carousel ── */
 const workshops = [
-  { num: "01", title: "Design Thinking", desc: "26th September 2026" },
-  { num: "02", title: "Frontend & Deployment", desc: "27th September 2026" },
-  { num: "03", title: "Backend", desc: "3rd October 2026" },
-  { num: "04", title: "AI Integration", desc: "4th October 2026" },
+  { num: "01", title: "Workshop 1", desc: "To be revealed" },
+  { num: "02", title: "Workshop 2", desc: "To be revealed" },
+  { num: "03", title: "Workshop 3", desc: "To be revealed" },
+  { num: "04", title: "Workshop 4", desc: "To be revealed" },
 ];
+
+/* ── Roadmap Timeline ── */
+const roadmap = [
+  { date: "10 Aug – 19 Sep 2026", title: "Registration Open", detail: "Teams of 3 to 4 members register through the official portal", type: "phase" },
+  { date: "20 Sep 2026", title: "Development Phase Begins", detail: "Teams start designing and building their prototypes", type: "phase" },
+  { date: "26 Sep 2026", title: "Workshop 1", detail: "To be revealed", type: "workshop" },
+  { date: "27 Sep 2026", title: "Workshop 2", detail: "To be revealed", type: "workshop" },
+  { date: "3 Oct 2026", title: "Workshop 3", detail: "To be revealed", type: "workshop" },
+  { date: "4 Oct 2026", title: "Workshop 4", detail: "To be revealed", type: "workshop" },
+  { date: "21 Oct 2026", title: "Development Phase Ends", detail: "Final submission deadline for all deliverables", type: "phase" },
+  { date: "22 – 28 Oct 2026", title: "Project Assessment", detail: "Judging panel evaluates every submission", type: "phase" },
+  { date: "14 Nov 2026", title: "Grand Finale", detail: "Shortlisted teams pitch live at Nadi@UTP", type: "finale" },
+];
+
+const ROADMAP_COLORS: Record<string, string> = {
+  phase: "#1a1f6e",
+  workshop: "#00c4cc",
+  finale: "#00998a",
+};
+
+function RoadmapPin({ number, color }: { number: number; color: string }) {
+  const s = 36;
+  const d = `M ${s / 2} 0 C ${s * 0.22} 0 0 ${s * 0.22} 0 ${s / 2} C 0 ${s * 0.82} ${s / 2} ${s * 1.3} ${s / 2} ${s * 1.3} C ${s / 2} ${s * 1.3} ${s} ${s * 0.82} ${s} ${s / 2} C ${s} ${s * 0.22} ${s * 0.78} 0 ${s / 2} 0 Z`;
+  return (
+    <svg width={s} height={s * 1.3} viewBox={`0 0 ${s} ${s * 1.3}`} style={{ filter: "drop-shadow(0 4px 8px rgba(26,31,110,0.35))" }}>
+      <path d={d} fill={color} stroke="#fff" strokeWidth={2.5} />
+      <circle cx={s / 2} cy={s / 2} r={s * 0.32} fill="#fff" />
+      <text x={s / 2} y={s / 2 + 1} textAnchor="middle" dominantBaseline="central" fontSize={s * 0.34} fontWeight={800} fill={color}>
+        {number}
+      </text>
+    </svg>
+  );
+}
+
+function RoadmapTimeline() {
+  const n = roadmap.length;
+  const rowH = 148;
+  const amp = 150;
+  const centerX = 490;
+  const width = 980;
+  const height = n * rowH + 40;
+  const pinSize = 36;
+
+  const points = roadmap.map((_, i) => ({
+    x: centerX + amp * Math.sin(i * (Math.PI / 2)),
+    y: i * rowH + rowH / 2 + 20,
+  }));
+
+  const cardWidth = 250;
+
+  return (
+    <div style={{ overflowX: "auto", paddingBottom: "8px" }} className="roadmap-scroll">
+      <div style={{ position: "relative", width, height, margin: "0 auto" }}>
+        <svg width={width} height={height} style={{ position: "absolute", top: 0, left: 0 }}>
+          {points.slice(0, -1).map((p, i) => {
+            const p1 = points[i + 1];
+            const mid = (p.y + p1.y) / 2;
+            const segD = `M ${p.x} ${p.y} C ${p.x} ${mid}, ${p1.x} ${mid}, ${p1.x} ${p1.y}`;
+            return <path key={i} d={segD} stroke={ROADMAP_COLORS[roadmap[i].type]} strokeOpacity={0.85} strokeWidth={12} fill="none" strokeLinecap="round" />;
+          })}
+          {points.map((p, i) => {
+            const isRight = i % 2 === 0;
+            const connectorX = isRight ? p.x + pinSize / 2 + 6 : p.x - pinSize / 2 - 6;
+            const cardEdgeX = isRight ? p.x + 46 : p.x - 46;
+            return (
+              <line
+                key={`c${i}`}
+                x1={connectorX}
+                y1={p.y}
+                x2={cardEdgeX}
+                y2={p.y}
+                stroke="#1a1f6e"
+                strokeOpacity={0.35}
+                strokeWidth={2}
+                strokeDasharray="3 5"
+              />
+            );
+          })}
+        </svg>
+
+        {points.map((p, i) => {
+          const item = roadmap[i];
+          return (
+            <div key={i} style={{ position: "absolute", left: p.x - pinSize / 2, top: p.y - (pinSize * 1.3) / 2, zIndex: 2 }}>
+              <RoadmapPin number={i + 1} color={ROADMAP_COLORS[item.type]} />
+            </div>
+          );
+        })}
+
+        {points.map((p, i) => {
+          const item = roadmap[i];
+          const isRight = i % 2 === 0;
+          return (
+            <div
+              key={`card${i}`}
+              style={{
+                position: "absolute",
+                top: p.y - 46,
+                left: isRight ? p.x + 50 : p.x - 50 - cardWidth,
+                width: cardWidth,
+                background: "#fff",
+                border: `1.5px solid ${ROADMAP_COLORS[item.type]}33`,
+                borderRadius: "14px",
+                padding: "16px 18px",
+                boxShadow: "0 8px 24px rgba(26,31,110,0.1)",
+              }}
+            >
+              <div style={{ fontSize: "0.68rem", fontWeight: 700, color: ROADMAP_COLORS[item.type], textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>
+                {item.date}
+              </div>
+              <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.98rem", marginBottom: "3px" }}>{item.title}</div>
+              <div style={{ fontSize: "0.82rem", color: "#666", lineHeight: 1.5 }}>{item.detail}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 function WorkshopCarousel() {
   const [current, setCurrent] = useState(0);
@@ -372,17 +491,6 @@ export default function Page() {
     { num: "04", name: "Grand Finale", date: "14 Nov 2026 · Nadi@UTP", desc: "Selected finalists pitch live to industry judges. Winners announced at the award ceremony." },
   ];
 
-  const schedule = [
-    { time: "9:00 am", activity: "Arrival & Booth Setup", detail: "Finalists arrive and set up project booths" },
-    { time: "10:00 am", activity: "Public Exhibition", detail: "Open to students & public — live demos" },
-    { time: "11:30 am", activity: "Opening Ceremony", detail: "Judge introductions & pitching briefing" },
-    { time: "12:15 pm", activity: "Lunch & Networking", detail: "Judges, guests & participants mingle" },
-    { time: "1:30 pm", activity: "Final Pitching Session", detail: "Top teams present on stage to judges" },
-    { time: "4:00 pm", activity: "Judges' Deliberation", detail: "Final scoring while closing video plays" },
-    { time: "4:30 pm", activity: "Award Ceremony", detail: "Winners announced & prizes presented" },
-    { time: "5:00 pm", activity: "Wrap-Up", detail: "Group photo & event close" },
-  ];
-
   const faqs = [
     { q: "Who can participate in CodeFest '26?", a: "All undergraduate students from any Malaysian university. Teams must consist of 3 to 4 members." },
     { q: "What is the registration fee?", a: "RM 30 per team. Registration opens on 10 August 2026 via our online portal." },
@@ -485,7 +593,7 @@ export default function Page() {
               <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                 {[
                   { icon: "📅", text: "10 Aug – 14 Nov 2026" },
-                  { icon: "📍", text: "Nadi@UTP, UTP" },
+                  { icon: "📍", text: "Nadi@UTP, Universiti Teknologi PETRONAS" },
                   { icon: "💰", text: "RM 30 / team" },
                 ].map(({ icon, text }) => (
                   <span key={text} style={{ background: "rgba(26,31,110,0.75)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "100px", padding: "7px 16px", fontSize: "0.8rem", fontWeight: 600, backdropFilter: "blur(8px)" }}>
@@ -661,25 +769,13 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── SCHEDULE ── */}
-      <section id="schedule" style={{ padding: "96px 24px" }}>
-        <div className="max-w-4xl mx-auto">
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span className="section-eyebrow">Grand Finale · 14 November 2026</span>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>Day of the Finale</h2>
-          </div>
-          <div>
-            {schedule.map((item, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "110px 1fr", gap: "24px", padding: "24px 0", borderBottom: i < schedule.length - 1 ? "1px solid #d0f7f3" : "none", alignItems: "flex-start" }}>
-                <div style={{ fontSize: "0.82rem", fontWeight: 700, color: "#009999", paddingTop: "2px" }}>{item.time}</div>
-                <div>
-                  <div style={{ fontWeight: 700, color: "#1a1f6e", marginBottom: "4px" }}>{item.activity}</div>
-                  <div style={{ fontSize: "0.875rem", color: "#666" }}>{item.detail}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* ── ROADMAP ── */}
+      <section id="roadmap" style={{ padding: "96px 24px", overflow: "hidden" }}>
+        <div style={{ textAlign: "center", marginBottom: "56px" }}>
+          <span className="section-eyebrow">10 August – 14 November 2026</span>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>The Road to the Grand Finale</h2>
         </div>
+        <RoadmapTimeline />
       </section>
 
       {/* ── WORKSHOPS ── */}
@@ -880,7 +976,7 @@ export default function Page() {
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.45, marginBottom: "16px" }}>Quick Links</div>
-              {["About", "Timeline", "Prizes", "Schedule", "Workshops", "FAQ"].map((link) => (
+              {["About", "Timeline", "Prizes", "Roadmap", "Workshops", "FAQ"].map((link) => (
                 <a key={link} href={`#${link.toLowerCase()}`} style={{ display: "block", color: "rgba(255,255,255,0.55)", textDecoration: "none", marginBottom: "10px", fontSize: "0.875rem", transition: "color 0.2s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#00e5a0")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}>

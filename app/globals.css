@@ -370,17 +370,11 @@ body {
 .prize-extra-desc { font-size: 0.85rem; color: #666; }
 
 /* ═══════════════════════════════════════
-   SCHEDULE
+   ROADMAP
    ═══════════════════════════════════════ */
-
-.schedule-item {
-  display: grid; grid-template-columns: 110px 1fr; gap: 24px;
-  padding: 24px 0; align-items: flex-start;
-}
-.schedule-item-border { border-bottom: 1px solid #d0f7f3; }
-.schedule-time { font-size: 0.82rem; font-weight: 700; color: #009999; padding-top: 2px; }
-.schedule-activity { font-weight: 700; color: var(--navy-deep); margin-bottom: 4px; }
-.schedule-detail { font-size: 0.875rem; color: #666; }
+.roadmap-scroll { scrollbar-width: thin; scrollbar-color: var(--teal-start) transparent; }
+.roadmap-scroll::-webkit-scrollbar { height: 8px; }
+.roadmap-scroll::-webkit-scrollbar-thumb { background: var(--teal-start); border-radius: 100px; }
 
 /* ═══════════════════════════════════════
    REGISTER CTA
