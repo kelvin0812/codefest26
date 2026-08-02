@@ -188,11 +188,10 @@ const REGISTRATION_OPEN_MS = new Date("2026-08-10T00:00:00").getTime();
 
 /* ── Workshop Carousel ── */
 const workshops = [
-  { num: "01", title: "Workshop 1", desc: "Details coming soon" },
-  { num: "02", title: "Workshop 2", desc: "Details coming soon" },
-  { num: "03", title: "Workshop 3", desc: "Details coming soon" },
-  { num: "04", title: "Workshop 4", desc: "Details coming soon" },
-  { num: "05", title: "Workshop 5", desc: "Details coming soon" },
+  { num: "01", title: "Design Thinking", desc: "26th September 2026" },
+  { num: "02", title: "Frontend & Deployment", desc: "27th September 2026" },
+  { num: "03", title: "Backend", desc: "3rd October 2026" },
+  { num: "04", title: "AI Integration", desc: "4th October 2026" },
 ];
 
 function WorkshopCarousel() {
@@ -692,7 +691,7 @@ export default function Page() {
               Workshops
             </h2>
             <p style={{ color: "#666", maxWidth: "540px", margin: "16px auto 0", lineHeight: 1.75 }}>
-              Sharpen your skills with 5 expert-led workshops designed to prepare you for the competition and beyond.
+              Sharpen your skills with 4 expert-led workshops designed to prepare you for the competition and beyond.
             </p>
           </div>
           <WorkshopCarousel />
