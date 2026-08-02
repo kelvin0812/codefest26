@@ -55,7 +55,7 @@ function CountdownBox({ value, label }: { value: number; label: string }) {
 }
 
 /* ── Nav ── */
-function Nav() {
+function Nav({ onRegister }: { onRegister: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -89,6 +89,7 @@ function Nav() {
 
         <a
           href="#register"
+          onClick={(e) => { e.preventDefault(); onRegister(); }}
           style={{
             background: "#1a1f6e",
             color: "#fff",
@@ -107,6 +108,79 @@ function Nav() {
         </a>
       </div>
     </nav>
+  );
+}
+
+/* ── Registration Modal ── */
+function RegModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 1000,
+        background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "24px",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff", borderRadius: "20px", padding: "48px 40px",
+          maxWidth: "440px", width: "100%", textAlign: "center",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.2)",
+          position: "relative",
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          style={{
+            position: "absolute", top: "16px", right: "16px",
+            background: "none", border: "none", cursor: "pointer",
+            fontSize: "1.4rem", color: "#999", lineHeight: 1,
+          }}
+        >×</button>
+
+        {/* Icon */}
+        <div style={{ fontSize: "3rem", marginBottom: "16px" }}>📅</div>
+
+        <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#1a1f6e", marginBottom: "12px" }}>
+          Registration Opening Soon
+        </h3>
+        <p style={{ color: "#555", lineHeight: 1.75, fontSize: "0.95rem", marginBottom: "28px" }}>
+          Registration for CodeFest &apos;26 will open on{" "}
+          <strong style={{ color: "#1a1f6e" }}>7th August 2026</strong>.
+          <br />Stay tuned — we&apos;ll see you there!
+        </p>
+
+        <div style={{
+          display: "inline-block",
+          background: "linear-gradient(135deg, #00c4cc, #00e5a0)",
+          color: "#1a1f6e", fontWeight: 800, fontSize: "1rem",
+          padding: "10px 28px", borderRadius: "100px",
+          letterSpacing: "0.02em",
+        }}>
+          7 August 2026
+        </div>
+
+        <div style={{ marginTop: "24px" }}>
+          <button
+            onClick={onClose}
+            style={{
+              background: "none", border: "2px solid #d0f5f0", borderRadius: "8px",
+              padding: "9px 24px", color: "#009999", fontWeight: 600,
+              fontSize: "0.88rem", cursor: "pointer", transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#f0fdfb"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "none"; }}
+          >
+            Got it
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -289,6 +363,7 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 
 /* ── Main ── */
 export default function Page() {
+  const [showRegModal, setShowRegModal] = useState(false);
   const countdown = useCountdown(REGISTRATION_OPEN_MS);
 
   const phases = [
@@ -321,7 +396,8 @@ export default function Page() {
 
   return (
     <>
-      <Nav />
+      {showRegModal && <RegModal onClose={() => setShowRegModal(false)} />}
+      <Nav onRegister={() => setShowRegModal(true)} />
 
       {/* ── HERO ── */}
       <section className="hero-bg" style={{ paddingTop: "88px", paddingBottom: "80px", minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
@@ -402,7 +478,7 @@ export default function Page() {
               </p>
 
               <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "36px" }}>
-                <a href="#register" className="btn-primary">Register Now →</a>
+                <a href="#register" onClick={(e) => { e.preventDefault(); setShowRegModal(true); }} className="btn-primary">Register Now →</a>
                 <a href="#about" className="btn-outline">Learn More</a>
               </div>
 
@@ -639,7 +715,7 @@ export default function Page() {
             Form your team, register for RM 30, and compete on a national stage at Universiti Teknologi PETRONAS.
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="#" style={{ background: "#1a1f6e", color: "#fff", padding: "14px 36px", borderRadius: "8px", fontWeight: 800, fontSize: "1rem", textDecoration: "none", transition: "background 0.2s", display: "inline-block" }}
+            <a href="#" onClick={(e) => { e.preventDefault(); setShowRegModal(true); }} style={{ background: "#1a1f6e", color: "#fff", padding: "14px 36px", borderRadius: "8px", fontWeight: 800, fontSize: "1rem", textDecoration: "none", transition: "background 0.2s", display: "inline-block" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#243040")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}>
               Register Your Team
