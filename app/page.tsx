@@ -374,7 +374,7 @@ export default function Page() {
                 marginBottom: "16px",
               }}>
                 <span>20</span>
-              
+
 
                 <span>26</span>
               </div>
@@ -394,7 +394,7 @@ export default function Page() {
               </div>
 
               <p style={{ color: "rgba(255,255,255,0.92)", lineHeight: 1.75, fontSize: "1.05rem", marginBottom: "36px", maxWidth: "420px" }}>
-                Malaysia&apos;s premier national coding competition — build human-centric technology that matters.
+                This intervarsity coding competition invites university students to develop innovative digital solutions. Your mission is to build a website or app that solves real societal problems.
                 <br /><br />
                 <em style={{ fontStyle: "normal", fontWeight: 700, color: "#1a1f6e" }}>
                   &ldquo;Innovating for the People, by the People&rdquo;
@@ -462,10 +462,10 @@ export default function Page() {
                 Where Code Meets Community
               </h2>
               <p style={{ color: "#555", lineHeight: 1.8, marginBottom: "20px" }}>
-                <strong style={{ color: "#1a1f6e" }}>SYNTECH</strong> is UTP&apos;s inter-varsity student-led tech club bridging academic theory and industry practice. Our mission: transform curiosity into impactful technology through hands-on experience.
+                <strong style={{ color: "#1a1f6e" }}>SYNTECH Organization</strong> is a student-led technology club at Universiti Teknologi PETRONAS dedicated to bridging the gap between academic theory and industry practice. Our mission is to transform curiosity into impactful technology through hands-on experience and holistic leadership.
               </p>
               <p style={{ color: "#555", lineHeight: 1.8, marginBottom: "32px" }}>
-                CodeFest &apos;26 is our premier national-level coding competition — a high-impact platform for students across Malaysia to sharpen technical expertise and engage with industry leaders in AI, software engineering, and cybersecurity.
+                CodeFest &apos;26 is our flagship intervarsity coding competition organized under the theme "Innovating for the People, by the People". This initiative serves as a high-impact platform for university students across Malaysia to sharpen their technical expertise by developing a website or app that addresses specific societal challenges. Participants will also have the opportunity to engage directly with industry leaders in fields such as artificial intelligence, software engineering, and cybersecurity through corporate exhibitions and specialized workshops.
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                 {[
@@ -482,22 +482,35 @@ export default function Page() {
             </div>
 
             <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
-              <div style={{ background: "linear-gradient(140deg, #00c4cc 0%, #00e5a0 100%)", borderRadius: "24px", padding: "48px 40px", color: "#1a1f6e", width: "100%", maxWidth: "380px", position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", bottom: -40, right: -40, opacity: 0.2 }}>
-                  <Arch size={200} strokeColor="#1a1f6e" />
+              <div style={{ background: "linear-gradient(140deg, #00c4cc 0%, #00e5a0 100%)", borderRadius: "24px", color: "#1a1f6e", width: "100%", maxWidth: "380px", position: "relative", overflow: "hidden" }}>
+                {/* Group photo */}
+                <div style={{ width: "100%", height: "200px", overflow: "hidden" }}>
+                  <Image
+                    src="/hackathon-group.jpeg"
+                    alt="Secure Nex Hackathon 2025 — Group photo at Nadi@UTP"
+                    width={380}
+                    height={200}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
                 </div>
-                <div style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.65, marginBottom: "12px" }}>Past Success</div>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "16px", lineHeight: 1.3 }}>Secure Nex Hackathon 2025</h3>
-                <p style={{ opacity: 0.85, lineHeight: 1.75, fontSize: "0.9rem", marginBottom: "24px" }}>
-                  Organized with PETRONAS, UTP & CeRDaS. 15–16 Nov 2025. Top 10 teams competed in a high-stakes Grand Finale at Nadi@UTP.
-                </p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                  {[{ v: "10", l: "Finalist Teams" }, { v: "2 Days", l: "Intensive Event" }].map(({ v, l }) => (
-                    <div key={l} style={{ background: "rgba(26,31,110,0.12)", borderRadius: "10px", padding: "14px 16px" }}>
-                      <div style={{ fontSize: "1.3rem", fontWeight: 800 }}>{v}</div>
-                      <div style={{ fontSize: "0.72rem", opacity: 0.7, marginTop: "2px" }}>{l}</div>
-                    </div>
-                  ))}
+                {/* Card content */}
+                <div style={{ padding: "32px 40px 48px", position: "relative" }}>
+                  <div style={{ position: "absolute", bottom: -40, right: -40, opacity: 0.2 }}>
+                    <Arch size={200} strokeColor="#1a1f6e" />
+                  </div>
+                  <div style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.65, marginBottom: "12px" }}>Past Success</div>
+                  <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "16px", lineHeight: 1.3 }}>Secure Nex Hackathon 2025</h3>
+                  <p style={{ opacity: 0.85, lineHeight: 1.75, fontSize: "0.9rem", marginBottom: "24px" }}>
+                    Organized with PETRONAS, UTP &amp; CeRDaS. 15–16 Nov 2025. Top 10 teams competed in a high-stakes Grand Finale at Nadi@UTP.
+                  </p>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                    {[{ v: "10", l: "Finalist Teams" }, { v: "2 Days", l: "Intensive Event" }].map(({ v, l }) => (
+                      <div key={l} style={{ background: "rgba(26,31,110,0.12)", borderRadius: "10px", padding: "14px 16px" }}>
+                        <div style={{ fontSize: "1.3rem", fontWeight: 800 }}>{v}</div>
+                        <div style={{ fontSize: "0.72rem", opacity: 0.7, marginTop: "2px" }}>{l}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -671,7 +684,7 @@ export default function Page() {
             </h2>
           </div> */}
 
-          {/* Gold
+      {/* Gold
           <div style={{ marginBottom: "48px" }}>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <span style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1f6e", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
@@ -690,7 +703,7 @@ export default function Page() {
             </div>
           </div> */}
 
-          {/* Silver
+      {/* Silver
           <div style={{ marginBottom: "48px" }}>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <span style={{ background: "linear-gradient(135deg, #C0C0C0, #A0A0A0)", color: "#fff", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
@@ -709,8 +722,8 @@ export default function Page() {
             </div>
           </div> */}
 
-          {/* Bronze */}
-          {/* <div>
+      {/* Bronze */}
+      {/* <div>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <span style={{ background: "linear-gradient(135deg, #CD7F32, #A0522D)", color: "#fff", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                 🥉 Bronze Sponsors
@@ -766,7 +779,7 @@ export default function Page() {
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#E1306C")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.1 4.1 0 011.522.99 4.1 4.1 0 01.99 1.522c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.1 4.1 0 01-.99 1.522 4.1 4.1 0 01-1.522.99c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.1 4.1 0 01-1.522-.99 4.1 4.1 0 01-.99-1.522c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.1 4.1 0 01.99-1.522 4.1 4.1 0 011.522-.99c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a6.27 6.27 0 00-2.265 1.474A6.27 6.27 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a6.27 6.27 0 001.474 2.265 6.27 6.27 0 002.265 1.474c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a6.27 6.27 0 002.265-1.474 6.27 6.27 0 001.474-2.265c.297-.762.5-1.635.558-2.913C23.986 15.667 24 15.259 24 12s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a6.27 6.27 0 00-1.474-2.265A6.27 6.27 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.1 4.1 0 011.522.99 4.1 4.1 0 01.99 1.522c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.1 4.1 0 01-.99 1.522 4.1 4.1 0 01-1.522.99c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.1 4.1 0 01-1.522-.99 4.1 4.1 0 01-.99-1.522c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.1 4.1 0 01.99-1.522 4.1 4.1 0 011.522-.99c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a6.27 6.27 0 00-2.265 1.474A6.27 6.27 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a6.27 6.27 0 001.474 2.265 6.27 6.27 0 002.265 1.474c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a6.27 6.27 0 002.265-1.474 6.27 6.27 0 001.474-2.265c.297-.762.5-1.635.558-2.913C23.986 15.667 24 15.259 24 12s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a6.27 6.27 0 00-1.474-2.265A6.27 6.27 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z" />
                   </svg>
                   <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>CodeFest</span>
                 </a>
@@ -775,7 +788,7 @@ export default function Page() {
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#E1306C")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.1 4.1 0 011.522.99 4.1 4.1 0 01.99 1.522c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.1 4.1 0 01-.99 1.522 4.1 4.1 0 01-1.522.99c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.1 4.1 0 01-1.522-.99 4.1 4.1 0 01-.99-1.522c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.1 4.1 0 01.99-1.522 4.1 4.1 0 011.522-.99c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a6.27 6.27 0 00-2.265 1.474A6.27 6.27 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a6.27 6.27 0 001.474 2.265 6.27 6.27 0 002.265 1.474c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a6.27 6.27 0 002.265-1.474 6.27 6.27 0 001.474-2.265c.297-.762.5-1.635.558-2.913C23.986 15.667 24 15.259 24 12s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a6.27 6.27 0 00-1.474-2.265A6.27 6.27 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.1 4.1 0 011.522.99 4.1 4.1 0 01.99 1.522c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.1 4.1 0 01-.99 1.522 4.1 4.1 0 01-1.522.99c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.1 4.1 0 01-1.522-.99 4.1 4.1 0 01-.99-1.522c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.1 4.1 0 01.99-1.522 4.1 4.1 0 011.522-.99c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a6.27 6.27 0 00-2.265 1.474A6.27 6.27 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a6.27 6.27 0 001.474 2.265 6.27 6.27 0 002.265 1.474c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a6.27 6.27 0 002.265-1.474 6.27 6.27 0 001.474-2.265c.297-.762.5-1.635.558-2.913C23.986 15.667 24 15.259 24 12s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a6.27 6.27 0 00-1.474-2.265A6.27 6.27 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z" />
                   </svg>
                   <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>SYNTECH</span>
                 </a>
@@ -784,7 +797,7 @@ export default function Page() {
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#0A66C2")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
                   <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>LinkedIn</span>
                 </a>

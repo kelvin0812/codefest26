@@ -372,7 +372,7 @@ body {
 /* ═══════════════════════════════════════
    SCHEDULE
    ═══════════════════════════════════════ */
-.schedule-list { }
+
 .schedule-item {
   display: grid; grid-template-columns: 110px 1fr; gap: 24px;
   padding: 24px 0; align-items: flex-start;
