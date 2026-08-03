@@ -11,6 +11,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "UTP CodeFest '26",
   description: "CodeFest '26 is our flagship intervarsity coding competition organized under the theme \"Innovating for the People, by the People\". This initiative serves as a high-impact platform for university students across Malaysia to sharpen their technical expertise by developing a website or app that addresses specific societal challenges. Participants will also have the opportunity to engage directly with industry leaders in fields such as artificial intelligence, software engineering, and cybersecurity through corporate exhibitions and specialized workshops.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
