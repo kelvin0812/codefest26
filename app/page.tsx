@@ -55,8 +55,11 @@ function CountdownBox({ value, label }: { value: number; label: string }) {
 }
 
 /* ── Nav ── */
+const NAV_LINKS = ["About", "Timeline", "Prizes", "Roadmap", "Workshops", "FAQ"];
+
 function Nav({ onRegister }: { onRegister: () => void }) {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll);
@@ -64,8 +67,8 @@ function Nav({ onRegister }: { onRegister: () => void }) {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "nav-scrolled shadow-lg" : "nav-blur"}`}>
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled || menuOpen ? "nav-scrolled shadow-lg" : "nav-blur"}`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         <div className="flex items-center gap-2">
           <Image src="/logo.png" alt="CodeFest '26 Logo" width={36} height={36} style={{ filter: "brightness(0) invert(1)" }} />
           <span style={{ fontWeight: 800, color: "#fff", fontSize: "1rem", letterSpacing: "-0.01em", textShadow: "0 1px 4px rgba(0,0,0,0.2)", fontFamily: "'Mokoto', monospace" }}>
@@ -74,7 +77,7 @@ function Nav({ onRegister }: { onRegister: () => void }) {
         </div>
 
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-          {["About", "Timeline", "Prizes", "Roadmap", "Workshops", "FAQ"].map((item) => (
+          {NAV_LINKS.map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
@@ -87,26 +90,63 @@ function Nav({ onRegister }: { onRegister: () => void }) {
           ))}
         </div>
 
-        <a
-          href="#register"
-          onClick={(e) => { e.preventDefault(); onRegister(); }}
-          style={{
-            background: "#1a1f6e",
-            color: "#fff",
-            padding: "9px 22px",
-            borderRadius: "8px",
-            fontWeight: 700,
-            fontSize: "0.85rem",
-            textDecoration: "none",
-            transition: "background 0.2s",
-            border: "1px solid rgba(255,255,255,0.15)",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "#00c4cc")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}
-        >
-          Register Now
-        </a>
+        <div className="flex items-center gap-3">
+          <a
+            href="#register"
+            onClick={(e) => { e.preventDefault(); onRegister(); setMenuOpen(false); }}
+            className="hidden sm:inline-block"
+            style={{
+              background: "#1a1f6e",
+              color: "#fff",
+              padding: "9px 22px",
+              borderRadius: "8px",
+              fontWeight: 700,
+              fontSize: "0.85rem",
+              textDecoration: "none",
+              transition: "background 0.2s",
+              border: "1px solid rgba(255,255,255,0.15)",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#00c4cc")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}
+          >
+            Register Now
+          </a>
+
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            className="md:hidden flex flex-col"
+            style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", gap: "5px" }}
+          >
+            <span style={{ width: "22px", height: "2px", background: "#fff", transition: "transform 0.2s", transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none" }} />
+            <span style={{ width: "22px", height: "2px", background: "#fff", opacity: menuOpen ? 0 : 1, transition: "opacity 0.2s" }} />
+            <span style={{ width: "22px", height: "2px", background: "#fff", transition: "transform 0.2s", transform: menuOpen ? "translateY(-7px) rotate(-45deg)" : "none" }} />
+          </button>
+        </div>
       </div>
+
+      {menuOpen && (
+        <div className="md:hidden flex flex-col" style={{ background: "rgba(0, 60, 80, 0.97)", borderTop: "1px solid rgba(255,255,255,0.1)", padding: "8px 24px 20px" }}>
+          {NAV_LINKS.map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              onClick={() => setMenuOpen(false)}
+              style={{ textDecoration: "none", color: "rgba(255,255,255,0.9)", padding: "12px 0", fontSize: "1rem", fontWeight: 600, borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+            >
+              {item}
+            </a>
+          ))}
+          <a
+            href="#register"
+            onClick={(e) => { e.preventDefault(); onRegister(); setMenuOpen(false); }}
+            style={{ marginTop: "16px", background: "#1a1f6e", color: "#fff", padding: "12px 22px", borderRadius: "8px", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none", textAlign: "center" }}
+          >
+            Register Now
+          </a>
+        </div>
+      )}
     </nav>
   );
 }
@@ -313,6 +353,27 @@ function RoadmapTimeline() {
   );
 }
 
+function RoadmapMobile() {
+  return (
+    <div className="roadmap-mobile-list">
+      {roadmap.map((item, i) => (
+        <div key={i} className="roadmap-mobile-item">
+          <div className="roadmap-mobile-dot" style={{ background: ROADMAP_COLORS[item.type] }}>
+            {i + 1}
+          </div>
+          <div className="roadmap-mobile-card">
+            <div style={{ fontSize: "0.7rem", fontWeight: 700, color: ROADMAP_COLORS[item.type], textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "3px" }}>
+              {item.date}
+            </div>
+            <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "1rem", marginBottom: "3px" }}>{item.title}</div>
+            <div style={{ fontSize: "0.85rem", color: "#666", lineHeight: 1.55 }}>{item.detail}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function WorkshopCarousel() {
   const [current, setCurrent] = useState(0);
 
@@ -322,14 +383,14 @@ function WorkshopCarousel() {
   const ws = workshops[current];
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "24px", justifyContent: "center" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "clamp(10px, 4vw, 24px)", justifyContent: "center" }}>
       {/* Left arrow */}
       <button
         onClick={prev}
         aria-label="Previous workshop"
         style={{
-          width: "48px",
-          height: "48px",
+          width: "clamp(38px, 10vw, 48px)",
+          height: "clamp(38px, 10vw, 48px)",
           borderRadius: "50%",
           border: "2px solid #00c4cc",
           background: "#fff",
@@ -355,7 +416,7 @@ function WorkshopCarousel() {
         background: "#fff",
         border: "2px solid rgba(0,196,204,0.3)",
         borderRadius: "20px",
-        padding: "48px 40px",
+        padding: "clamp(28px, 8vw, 48px) clamp(18px, 6vw, 40px)",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
@@ -363,9 +424,9 @@ function WorkshopCarousel() {
         boxShadow: "0 8px 32px rgba(0, 196, 204, 0.12)",
       }}>
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "5px", background: "linear-gradient(90deg, #00c4cc, #00e5a0)", borderRadius: "20px 20px 0 0" }} />
-        <div style={{ fontSize: "4rem", fontWeight: 900, color: "#d0f7f3", lineHeight: 1, marginBottom: "16px", letterSpacing: "-0.04em" }}>{ws.num}</div>
-        <h3 style={{ fontSize: "1.4rem", fontWeight: 700, color: "#1a1f6e", marginBottom: "10px" }}>{ws.title}</h3>
-        <p style={{ fontSize: "1rem", color: "#666", lineHeight: 1.75 }}>{ws.desc}</p>
+        <div style={{ fontSize: "clamp(2.4rem, 9vw, 4rem)", fontWeight: 900, color: "#d0f7f3", lineHeight: 1, marginBottom: "16px", letterSpacing: "-0.04em" }}>{ws.num}</div>
+        <h3 style={{ fontSize: "clamp(1.15rem, 4vw, 1.4rem)", fontWeight: 700, color: "#1a1f6e", marginBottom: "10px" }}>{ws.title}</h3>
+        <p style={{ fontSize: "0.95rem", color: "#666", lineHeight: 1.75 }}>{ws.desc}</p>
 
         {/* Dots indicator */}
         <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginTop: "28px" }}>
@@ -393,8 +454,8 @@ function WorkshopCarousel() {
         onClick={next}
         aria-label="Next workshop"
         style={{
-          width: "48px",
-          height: "48px",
+          width: "clamp(38px, 10vw, 48px)",
+          height: "clamp(38px, 10vw, 48px)",
           borderRadius: "50%",
           border: "2px solid #00c4cc",
           background: "#fff",
@@ -526,7 +587,7 @@ export default function Page() {
             </span>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "60px", alignItems: "center" }}>
+          <div className="hero-grid">
             {/* Left */}
             <div>
               {/* CODEFEST — tech style */}
@@ -604,7 +665,7 @@ export default function Page() {
             </div>
 
             {/* Right — countdown + stats */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "28px" }}>
+            <div className="hero-right">
               <div style={{ textAlign: "center" }}>
                 <p style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: "12px" }}>
                   Registration Opens In
@@ -617,7 +678,7 @@ export default function Page() {
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", width: "100%" }}>
+              <div className="stats-grid">
                 {[
                   { val: "Coming Soon", sub: "Total Prize Pool" },
                   { val: "30 Teams", sub: "Max Capacity" },
@@ -638,7 +699,7 @@ export default function Page() {
       {/* ── ABOUT ── */}
       <section id="about" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
         <div className="max-w-6xl mx-auto">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "center" }}>
+          <div className="about-grid">
             <div>
               <span className="section-eyebrow">About the Event</span>
               <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", lineHeight: 1.2, marginBottom: "20px", letterSpacing: "-0.02em" }}>
@@ -732,7 +793,7 @@ export default function Page() {
               Win Big, Build Bigger
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.15fr 1fr", gap: "20px", alignItems: "center", maxWidth: "780px", margin: "0 auto" }}>
+          <div className="prizes-podium">
             <div className="prize-runner">
               <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🥈</div>
               <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#009999", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>2nd Place</div>
@@ -752,7 +813,7 @@ export default function Page() {
               <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>+ Certificate</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: "20px", maxWidth: "780px", margin: "28px auto 0" }}>
+          <div className="prizes-extra">
             <div style={{ flex: 1, background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "24px", textAlign: "center" }}>
               <div style={{ fontSize: "1.6rem", marginBottom: "8px" }}>❤️</div>
               <div style={{ fontWeight: 700, color: "#1a1f6e", marginBottom: "4px" }}>People&apos;s Choice</div>
@@ -775,7 +836,12 @@ export default function Page() {
           <span className="section-eyebrow">10 August – 14 November 2026</span>
           <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>The Road to the Grand Finale</h2>
         </div>
-        <RoadmapTimeline />
+        <div className="hidden md:block">
+          <RoadmapTimeline />
+        </div>
+        <div className="md:hidden max-w-md mx-auto px-2">
+          <RoadmapMobile />
+        </div>
       </section>
 
       {/* ── WORKSHOPS ── */}
@@ -932,7 +998,7 @@ export default function Page() {
       {/* ── FOOTER ── */}
       <footer style={{ background: "#0a2a2a", color: "#fff", padding: "56px 24px 32px" }}>
         <div className="max-w-6xl mx-auto">
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "40px", marginBottom: "48px" }}>
+          <div className="footer-grid">
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
                 <Image src="/logo.png" alt="CodeFest '26 Logo" width={40} height={40} style={{ filter: "brightness(0) invert(1)" }} />

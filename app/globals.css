@@ -256,6 +256,10 @@ body {
   font-size: 0.6rem; text-transform: uppercase;
   letter-spacing: 0.18em; opacity: 0.6; margin-top: 6px;
 }
+@media (max-width: 480px) {
+  .countdown-box { min-width: 0; flex: 1; padding: 14px 8px; }
+  .countdown-num { font-size: 1.7rem; }
+}
 
 /* ═══════════════════════════════════════
    ABOUT SECTION
@@ -375,6 +379,22 @@ body {
 .roadmap-scroll { scrollbar-width: thin; scrollbar-color: var(--teal-start) transparent; }
 .roadmap-scroll::-webkit-scrollbar { height: 8px; }
 .roadmap-scroll::-webkit-scrollbar-thumb { background: var(--teal-start); border-radius: 100px; }
+
+.roadmap-mobile-list { position: relative; }
+.roadmap-mobile-item { position: relative; display: flex; gap: 16px; padding-bottom: 28px; }
+.roadmap-mobile-item:last-child { padding-bottom: 0; }
+.roadmap-mobile-item::before {
+  content: ''; position: absolute; left: 15px; top: 34px; bottom: 0; width: 2px;
+  background: rgba(26, 31, 110, 0.15);
+}
+.roadmap-mobile-item:last-child::before { display: none; }
+.roadmap-mobile-dot {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: 0.85rem;
+  box-shadow: 0 4px 10px rgba(26, 31, 110, 0.25); z-index: 1;
+}
+.roadmap-mobile-card { flex: 1; padding-top: 3px; min-width: 0; }
 
 /* ═══════════════════════════════════════
    REGISTER CTA
