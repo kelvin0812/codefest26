@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "CodeFest '26 — Innovating for the People, by the People | SYNTECH Organisation, UTP",
+  title: "UTP CodeFest '26",
   description: "Malaysia's premier national coding competition for university students. Build human-centric technology, compete for RM 2,300 in prizes, and present at Universiti Teknologi PETRONAS. 10 Aug – 14 Nov 2026.",
 };
 
