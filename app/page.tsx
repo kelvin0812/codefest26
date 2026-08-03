@@ -546,18 +546,18 @@ export default function Page() {
   const countdown = useCountdown(REGISTRATION_OPEN_MS);
 
   const phases = [
-    { num: "01", name: "Registration", date: "10 Aug – 19 Sep 2026", desc: "Form your team of 3–4 and sign up via the online portal. All Malaysian universities welcome." },
+    { num: "01", name: "Registration", date: "10 Aug – 19 Sep 2026", desc: "Form your team of 3–4 and sign up via the online portal. All local universities welcome." },
     { num: "02", name: "Development & Submission", date: "20 Sep – 21 Oct 2026", desc: "Build your working prototype or MVP addressing a real societal challenge. Submit all files by 21 Oct." },
     { num: "03", name: "Project Assessment", date: "22 – 28 Oct 2026", desc: "Judges evaluate submissions on creativity, technical skill, and real-world impact. Top teams proceed." },
     { num: "04", name: "Grand Finale", date: "14 Nov 2026 · Nadi@UTP", desc: "Selected finalists pitch live to industry judges. Winners announced at the award ceremony." },
   ];
 
   const faqs = [
-    { q: "Who can participate in CodeFest '26?", a: "All undergraduate students from any Malaysian university. Teams must consist of 3 to 4 members." },
+    { q: "Who can participate in CodeFest '26?", a: "All undergraduate students from any local university. Teams must consist of 3 to 4 members." },
     { q: "What is the registration fee?", a: "RM 30 per team. Registration opens on 10 August 2026 via our online portal." },
     { q: "What kind of projects are expected?", a: "Functional prototypes or MVPs addressing societal challenges using AI, cloud computing, cybersecurity, or software engineering." },
     { q: "Is the competition fully online?", a: "Preliminary phases are online. The Grand Finale on 14 November 2026 is a physical event at Nadi@UTP, Universiti Teknologi PETRONAS." },
-    { q: "What do winners receive?", a: "1st place RM 1,000 · 2nd place RM 700 · 3rd place RM 500 · People's Choice RM 100. All finishers receive a Certificate of Participation." },
+    // { q: "What do winners receive?", a: "1st place RM 1,000 · 2nd place RM 700 · 3rd place RM 500 · People's Choice RM 100. All finishers receive a Certificate of Participation." },
     { q: "Who organizes CodeFest '26?", a: "SYNTECH Organization at UTP, co-organised by the Department of Computing (DC), supported by Student Affairs (SA) and YUTP." },
     { q: "When is the track and rulebook will be released?", a: "Rulebook and track details will be released after the registration phase." },
   ];
@@ -581,9 +581,9 @@ export default function Page() {
         <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto px-6 w-full" style={{ position: "relative", zIndex: 2 }}>
           {/* Top label */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-            <Image src="/logo.png" alt="CodeFest '26 Logo" width={48} height={48} style={{ filter: "brightness(0) invert(1)" }} />
+            <Image src="/Syntech_Logo.png" alt="CodeFest '26 Logo" width={36} height={36}  />
             <span style={{ color: "rgba(255,255,255,0.9)", fontWeight: 700, fontSize: "0.85rem", letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              SYNTECH ORGANISATION
+              SYNTECH ORGANIZATION
             </span>
           </div>
 
@@ -702,15 +702,17 @@ export default function Page() {
           <div className="about-grid">
             <div>
               <span className="section-eyebrow">About the Event</span>
-              <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", lineHeight: 1.2, marginBottom: "20px", letterSpacing: "-0.02em" }}>
-                Where Code Meets Community
-              </h2>
-              <p style={{ color: "#555", lineHeight: 1.8, marginBottom: "20px" }}>
-                <strong style={{ color: "#1a1f6e" }}>SYNTECH Organization</strong> is a student-led technology club at Universiti Teknologi PETRONAS dedicated to bridging the gap between academic theory and industry practice. Our mission is to transform curiosity into impactful technology through hands-on experience and holistic leadership.
-              </p>
-              <p style={{ color: "#555", lineHeight: 1.8, marginBottom: "32px" }}>
-                CodeFest &apos;26 is our flagship intervarsity coding competition organized under the theme "Innovating for the People, by the People". This initiative serves as a high-impact platform for university students across Malaysia to sharpen their technical expertise by developing a website or app that addresses specific societal challenges. Participants will also have the opportunity to engage directly with industry leaders in fields such as artificial intelligence, software engineering, and cybersecurity through corporate exhibitions and specialized workshops.
-              </p>
+                <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", lineHeight: 1.2, marginBottom: "20px", letterSpacing: "-0.02em" }}>
+                  Where Code Meets Community
+                </h2>
+              <div style ={{textAlign: "justify"  }}>
+                <p style={{ color: "#555", lineHeight: 1.8, marginBottom: "20px"}}>
+                  <strong style={{ color: "#1a1f6e"}}>SYNTECH Organization</strong> is a student-led technology club at Universiti Teknologi PETRONAS dedicated to bridging the gap between academic theory and industry practice. Our mission is to transform curiosity into impactful technology through hands-on experience and holistic leadership.
+                </p>
+                <p style={{ color: "#555", lineHeight: 1.8, marginBottom: "32px" }}>
+                  CodeFest &apos;26 is our flagship intervarsity coding competition organized under the theme "Innovating for the People, by the People". This initiative serves as a high-impact platform for university students across Malaysia to sharpen their technical expertise by developing a website or app that addresses specific societal challenges. Participants will also have the opportunity to engage directly with industry leaders in fields such as artificial intelligence, software engineering, and cybersecurity through corporate exhibitions and specialized workshops.
+                </p>
+              </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                 {[
                   { sdg: "SDG 9", text: "Drive human-centric technical innovation" },
@@ -1052,7 +1054,7 @@ export default function Page() {
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.45, marginBottom: "16px" }}>Organisers</div>
-              {["SYNTECH Organization", "UTP — Dept. of Computing", "Student Affairs (SA)", "YUTP"].map((org) => (
+              {["SYNTECH Organization", "Department of Computing (DC)", "Student Affairs (SA)", "YUTP"].map((org) => (
                 <div key={org} style={{ color: "rgba(255,255,255,0.55)", marginBottom: "10px", fontSize: "0.875rem" }}>{org}</div>
               ))}
             </div>
