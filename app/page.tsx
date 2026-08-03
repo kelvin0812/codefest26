@@ -726,14 +726,14 @@ export default function Page() {
             </div>
 
             <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
-              <div style={{ background: "linear-gradient(140deg, #00c4cc 0%, #00e5a0 100%)", borderRadius: "24px", color: "#1a1f6e", width: "100%", maxWidth: "380px", position: "relative", overflow: "hidden" }}>
+              <div style={{ background: "linear-gradient(140deg, #00c4cc 0%, #00e5a0 100%)", borderRadius: "24px", color: "#1a1f6e", width: "100%", maxWidth: "500px", position: "relative", overflow: "hidden" }}>
                 {/* Group photo */}
-                <div style={{ width: "100%", height: "200px", overflow: "hidden" }}>
+                <div style={{ width: "100%", height: "260px", overflow: "hidden" }}>
                   <Image
                     src="/hackathon-group.jpeg"
                     alt="Secure Nex Hackathon 2025 — Group photo at Nadi@UTP"
-                    width={380}
-                    height={200}
+                    width={500}
+                    height={260}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </div>
