@@ -68,7 +68,7 @@ function Nav({ onRegister }: { onRegister: () => void }) {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled || menuOpen ? "nav-scrolled shadow-lg" : "nav-blur"}`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         <div className="flex items-center gap-2">
           <Image src="/logo.png" alt="CodeFest '26 Logo" width={36} height={36} style={{ filter: "brightness(0) invert(1)" }} />
           <span style={{ fontWeight: 800, color: "#fff", fontSize: "1rem", letterSpacing: "-0.01em", textShadow: "0 1px 4px rgba(0,0,0,0.2)", fontFamily: "'Mokoto', monospace" }}>
@@ -578,7 +578,7 @@ export default function Page() {
           <Arch size={420} strokeColor="#2e3491" />
         </div>
 
-        <div className="max-w-6xl mx-auto px-6 w-full" style={{ position: "relative", zIndex: 2 }}>
+        <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto px-6 w-full" style={{ position: "relative", zIndex: 2 }}>
           {/* Top label */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
             <Image src="/logo.png" alt="CodeFest '26 Logo" width={48} height={48} style={{ filter: "brightness(0) invert(1)" }} />
@@ -592,7 +592,7 @@ export default function Page() {
             <div>
               {/* CODEFEST — tech style */}
               <div style={{
-                fontSize: "clamp(3rem, 7vw, 5.5rem)",
+                fontSize: "clamp(3rem, 7vw, 6.5rem)",
                 fontWeight: 900,
                 color: "#fff",
                 letterSpacing: "0.08em",
@@ -607,7 +607,7 @@ export default function Page() {
 
               {/* 2026 with ⊙ */}
               <div style={{
-                fontSize: "clamp(3.5rem, 8vw, 6.5rem)",
+                fontSize: "clamp(3.5rem, 8vw, 7.5rem)",
                 fontWeight: 900,
                 color: "#1a1f6e",
                 letterSpacing: "0.06em",
@@ -637,7 +637,7 @@ export default function Page() {
                 UTP Annual Hackathon 1st Edition
               </div>
 
-              <p style={{ color: "rgba(255,255,255,0.92)", lineHeight: 1.75, fontSize: "1.05rem", marginBottom: "36px", maxWidth: "420px" }}>
+              <p style={{ color: "rgba(255,255,255,0.92)", lineHeight: 1.75, fontSize: "1.05rem", marginBottom: "36px", maxWidth: "480px" }}>
                 This intervarsity coding competition invites university students to develop innovative digital solutions. Your mission is to build a website or app that solves real societal problems.
                 <br /><br />
                 <em style={{ fontStyle: "normal", fontWeight: 700, color: "#1a1f6e" }}>
@@ -698,7 +698,7 @@ export default function Page() {
 
       {/* ── ABOUT ── */}
       <section id="about" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto">
           <div className="about-grid">
             <div>
               <span className="section-eyebrow">About the Event</span>
@@ -764,7 +764,7 @@ export default function Page() {
 
       {/* ── TIMELINE ── */}
       <section id="timeline" style={{ padding: "96px 24px" }}>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <span className="section-eyebrow">Competition Phases</span>
             <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
@@ -786,7 +786,7 @@ export default function Page() {
 
       {/* ── PRIZES ── */}
       <section id="prizes" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <span className="section-eyebrow">Prizes & Recognition</span>
             <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
@@ -997,7 +997,7 @@ export default function Page() {
 
       {/* ── FOOTER ── */}
       <footer style={{ background: "#0a2a2a", color: "#fff", padding: "56px 24px 32px" }}>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto">
           <div className="footer-grid">
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
