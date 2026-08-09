@@ -545,6 +545,16 @@ export default function Page() {
   const [showRegModal, setShowRegModal] = useState(false);
   const countdown = useCountdown(REGISTRATION_OPEN_MS);
 
+  const REG_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdsvLNidOPzGukcNwHKBozf1qAmRaWMUMmwCILiCLMrmYcHsA/viewform?usp=header";
+
+  const handleRegister = () => {
+    if (Date.now() >= REGISTRATION_OPEN_MS) {
+      window.open(REG_FORM_URL, "_blank", "noopener,noreferrer");
+    } else {
+      setShowRegModal(true);
+    }
+  };
+
   const phases = [
     { num: "01", name: "Registration", date: "10 Aug – 19 Sep 2026", desc: "Form your team of 3–4 and sign up via the online portal. All local universities welcome." },
     { num: "02", name: "Development & Submission", date: "20 Sep – 21 Oct 2026", desc: "Build your working prototype or MVP addressing a real societal challenge. Submit all files by 21 Oct." },
@@ -565,7 +575,7 @@ export default function Page() {
   return (
     <>
       {showRegModal && <RegModal onClose={() => setShowRegModal(false)} />}
-      <Nav onRegister={() => setShowRegModal(true)} />
+      <Nav onRegister={handleRegister} />
 
       {/* ── HERO ── */}
       <section className="hero-bg" style={{ paddingTop: "88px", paddingBottom: "80px", minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
@@ -646,7 +656,7 @@ export default function Page() {
               </p>
 
               <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "36px" }}>
-                <a href="#register" onClick={(e) => { e.preventDefault(); setShowRegModal(true); }} className="btn-primary">Register Now →</a>
+                <a href="#register" onClick={(e) => { e.preventDefault(); handleRegister(); }} className="btn-primary">Register Now →</a>
                 <a href="#about" className="btn-outline">Learn More</a>
               </div>
 
@@ -878,7 +888,7 @@ export default function Page() {
             Form your team, register for RM 30, and compete on a national stage at Universiti Teknologi PETRONAS.
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="#" onClick={(e) => { e.preventDefault(); setShowRegModal(true); }} style={{ background: "#1a1f6e", color: "#fff", padding: "14px 36px", borderRadius: "8px", fontWeight: 800, fontSize: "1rem", textDecoration: "none", transition: "background 0.2s", display: "inline-block" }}
+            <a href="#" onClick={(e) => { e.preventDefault(); handleRegister(); }} style={{ background: "#1a1f6e", color: "#fff", padding: "14px 36px", borderRadius: "8px", fontWeight: 800, fontSize: "1rem", textDecoration: "none", transition: "background 0.2s", display: "inline-block" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#243040")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}>
               Register Your Team
