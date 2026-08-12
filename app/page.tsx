@@ -224,7 +224,7 @@ function RegModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-const REGISTRATION_OPEN_MS = new Date("2026-08-10T00:00:00").getTime();
+const REGISTRATION_OPEN_MS = new Date("2026-09-19T00:00:00").getTime();
 
 /* ── Workshop Carousel ── */
 const workshops = [
@@ -678,7 +678,7 @@ export default function Page() {
             <div className="hero-right">
               <div style={{ textAlign: "center" }}>
                 <p style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: "12px" }}>
-                  Registration Opens In
+                  Registration Closes In
                 </p>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <CountdownBox value={countdown.days} label="Days" />
