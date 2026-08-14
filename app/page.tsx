@@ -225,6 +225,7 @@ function RegModal({ onClose }: { onClose: () => void }) {
 }
 
 const REGISTRATION_OPEN_MS = new Date("2026-09-19T00:00:00").getTime();
+const REGISTRATION_FORM_OPEN_MS = new Date("2026-08-10T00:00:00").getTime();
 
 /* ── Workshop Carousel ── */
 const workshops = [
@@ -548,7 +549,7 @@ export default function Page() {
   const REG_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdsvLNidOPzGukcNwHKBozf1qAmRaWMUMmwCILiCLMrmYcHsA/viewform?usp=header";
 
   const handleRegister = () => {
-    if (Date.now() >= REGISTRATION_OPEN_MS) {
+    if (Date.now() >= REGISTRATION_FORM_OPEN_MS) {
       window.open(REG_FORM_URL, "_blank", "noopener,noreferrer");
     } else {
       setShowRegModal(true);
