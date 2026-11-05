@@ -483,3 +483,41 @@ body {
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .hero-right { align-items: stretch; }
 }
+
+/* ═══════════════════════════════════════
+   VENUE · SCHEDULE · COMMITTEE
+   ═══════════════════════════════════════ */
+.btn-ghost {
+  border: 2px solid var(--navy-deep); color: var(--navy-deep);
+  padding: 11px 24px; border-radius: 8px; font-weight: 700; font-size: 0.95rem;
+  transition: all 0.2s; display: inline-block; cursor: pointer;
+  background: #fff; text-decoration: none;
+}
+.btn-ghost:hover { background: var(--navy-deep); color: #fff; }
+
+.venue-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: start; }
+.schedule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 900px; margin: 0 auto; }
+
+.committee-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+.member-card { width: 190px; transition: transform 0.2s, box-shadow 0.2s; }
+.member-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(26,31,110,0.14) !important; }
+
+@media (max-width: 900px) {
+  .venue-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .schedule-grid { grid-template-columns: 1fr; }
+  .committee-row { gap: 12px; }
+  .member-card { width: calc(50% - 6px); }
+}
+
+.finalists-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.finalist-card {
+  background: #fff; border: 1.5px solid #b2eee9; border-radius: 16px; padding: 22px 20px;
+  position: relative; overflow: hidden; box-shadow: 0 6px 18px rgba(26,31,110,0.07);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.finalist-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #00c4cc, #00e5a0); }
+.finalist-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(26,31,110,0.14); }
+@media (max-width: 1024px) { .finalists-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .finalists-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }

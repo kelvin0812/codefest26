@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import { advisors, highCommittee, departments, type Member } from "./data/committee";
 
 /* ── Arch SVG ── */
 function Arch({ size = 260, strokeColor = "#2e3491", className = "" }: { size?: number; strokeColor?: string; className?: string }) {
@@ -55,9 +56,9 @@ function CountdownBox({ value, label }: { value: number; label: string }) {
 }
 
 /* ── Nav ── */
-const NAV_LINKS = ["About", "Timeline", "Prizes", "Roadmap", "Workshops", "FAQ"];
+const NAV_LINKS = ["About", "Timeline", "Prizes", "Roadmap", "Workshops", "Finalists", "Venue", "Committee", "FAQ"];
 
-function Nav({ onRegister }: { onRegister: () => void }) {
+function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
@@ -76,7 +77,7 @@ function Nav({ onRegister }: { onRegister: () => void }) {
           </span>
         </div>
 
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+        <div className="hidden xl:flex items-center gap-7 text-sm font-medium">
           {NAV_LINKS.map((item) => (
             <a
               key={item}
@@ -92,8 +93,8 @@ function Nav({ onRegister }: { onRegister: () => void }) {
 
         <div className="flex items-center gap-3">
           <a
-            href="#register"
-            onClick={(e) => { e.preventDefault(); onRegister(); setMenuOpen(false); }}
+            href="#venue"
+            onClick={() => setMenuOpen(false)}
             className="hidden sm:inline-block"
             style={{
               background: "#1a1f6e",
@@ -109,14 +110,14 @@ function Nav({ onRegister }: { onRegister: () => void }) {
             onMouseEnter={(e) => (e.currentTarget.style.background = "#00c4cc")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}
           >
-            Register Now
+            Get Directions
           </a>
 
           <button
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="md:hidden flex flex-col"
+            className="xl:hidden flex flex-col"
             style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", gap: "5px" }}
           >
             <span style={{ width: "22px", height: "2px", background: "#fff", transition: "transform 0.2s", transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none" }} />
@@ -127,7 +128,7 @@ function Nav({ onRegister }: { onRegister: () => void }) {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden flex flex-col" style={{ background: "rgba(0, 60, 80, 0.97)", borderTop: "1px solid rgba(255,255,255,0.1)", padding: "8px 24px 20px" }}>
+        <div className="xl:hidden flex flex-col" style={{ background: "rgba(0, 60, 80, 0.97)", borderTop: "1px solid rgba(255,255,255,0.1)", padding: "8px 24px 20px" }}>
           {NAV_LINKS.map((item) => (
             <a
               key={item}
@@ -139,11 +140,11 @@ function Nav({ onRegister }: { onRegister: () => void }) {
             </a>
           ))}
           <a
-            href="#register"
-            onClick={(e) => { e.preventDefault(); onRegister(); setMenuOpen(false); }}
+            href="#venue"
+            onClick={() => setMenuOpen(false)}
             style={{ marginTop: "16px", background: "#1a1f6e", color: "#fff", padding: "12px 22px", borderRadius: "8px", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none", textAlign: "center" }}
           >
-            Register Now
+            Get Directions
           </a>
         </div>
       )}
@@ -151,98 +152,96 @@ function Nav({ onRegister }: { onRegister: () => void }) {
   );
 }
 
-/* ── Registration Modal ── */
-function RegModal({ onClose }: { onClose: () => void }) {
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed", inset: 0, zIndex: 1000,
-        background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "24px",
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "#fff", borderRadius: "20px", padding: "48px 40px",
-          maxWidth: "440px", width: "100%", textAlign: "center",
-          boxShadow: "0 24px 80px rgba(0,0,0,0.2)",
-          position: "relative",
-        }}
-      >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          style={{
-            position: "absolute", top: "16px", right: "16px",
-            background: "none", border: "none", cursor: "pointer",
-            fontSize: "1.4rem", color: "#999", lineHeight: 1,
-          }}
-        >×</button>
+/* Grand Finale start (Malaysia time, UTC+8) — drives the hero countdown */
+const FINALE_MS = new Date("2026-11-14T09:00:00+08:00").getTime();
 
-        {/* Icon */}
-        <div style={{ fontSize: "3rem", marginBottom: "16px" }}>📅</div>
+/* ── Venue ── */
+// Directions video hosted on Google Drive (sharing: anyone with the link can view)
+const NADI_VIDEO_URL = "https://drive.google.com/file/d/1uhpZ2_Wws0-l9T0ZZ4xR3IfGEC1WBIw1/view";
+const NADI_VIDEO_EMBED = "https://drive.google.com/file/d/1uhpZ2_Wws0-l9T0ZZ4xR3IfGEC1WBIw1/preview";
+const NADI_MAPS_URL = "https://www.google.com/maps/search/?api=1&query=NADI%20Universiti%20Teknologi%20PETRONAS%20Seri%20Iskandar";
 
-        <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#1a1f6e", marginBottom: "12px" }}>
-          Registration Opening Soon
-        </h3>
-        <p style={{ color: "#555", lineHeight: 1.75, fontSize: "0.95rem", marginBottom: "28px" }}>
-          Registration for CodeFest &apos;26 will open on{" "}
-          <strong style={{ color: "#1a1f6e" }}>10th August 2026</strong>.
-          <br />Stay tuned — we&apos;ll see you there!
-        </p>
+/* Grand Finale tentative (from proposal) — confirm with CNP before the event */
+const finaleSchedule = [
+  { time: "9:00 AM", activity: "Arrival of Finalists", detail: "Finalists check in and set up their booths" },
+  { time: "10:00 AM", activity: "Public Exhibition", detail: "Visitors explore booths, ask questions and see live demos" },
+  { time: "11:30 AM", activity: "Opening Ceremony", detail: "Judge introductions and final pitching briefing" },
+  { time: "12:15 PM", activity: "Lunch & Networking", detail: "Participants, judges and guests" },
+  { time: "1:30 PM", activity: "Final Pitching Session", detail: "Top teams pitch live to the judging panel" },
+  { time: "4:00 PM", activity: "Judges' Deliberation", detail: "Final scoring while a closing video plays" },
+  { time: "4:30 PM", activity: "Award Ceremony", detail: "Winners announced and prizes presented" },
+  { time: "5:00 PM", activity: "Closing & Photo Session", detail: "Group photo and event wrap-up" },
+];
 
-        <div style={{
-          display: "inline-block",
-          background: "linear-gradient(135deg, #00c4cc, #00e5a0)",
-          color: "#1a1f6e", fontWeight: 800, fontSize: "1rem",
-          padding: "10px 28px", borderRadius: "100px",
-          letterSpacing: "0.02em",
-        }}>
-          10 August 2026
-        </div>
-
-        <div style={{ marginTop: "24px" }}>
-          <button
-            onClick={onClose}
-            style={{
-              background: "none", border: "2px solid #d0f5f0", borderRadius: "8px",
-              padding: "9px 24px", color: "#009999", fontWeight: 600,
-              fontSize: "0.88rem", cursor: "pointer", transition: "all 0.2s",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "#f0fdfb"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "none"; }}
-          >
-            Got it
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const REGISTRATION_OPEN_MS = new Date("2026-09-19T00:00:00").getTime();
-const REGISTRATION_FORM_OPEN_MS = new Date("2026-08-10T00:00:00").getTime();
+/* ── Grand Finalists ── */
+const finalists = [
+  "4 Bits",
+  "Nexora",
+  "Dang Wangi",
+  "DSIG Team",
+  "Fe!nomenal",
+  "DimSum Developer",
+  "United Nations",
+  "EAQ",
+  "Ayam Gepuk Tokpa",
+  "AI Don't Know",
+];
 
 /* ── Workshop Carousel ── */
-const workshops = [
-  { num: "01", title: "Workshop 1", desc: "To be revealed" },
-  { num: "02", title: "Workshop 2", desc: "To be revealed" },
-  { num: "03", title: "Workshop 3", desc: "To be revealed" },
-  { num: "04", title: "Workshop 4", desc: "To be revealed" },
+type Speaker = { name: string; position: string; photo: string };
+const workshops: { num: string; theme: string; date: string; time: string; speakers: Speaker[] }[] = [
+  {
+    num: "01",
+    theme: "Design Thinking & Prototyping",
+    date: "23 Sep 2026",
+    time: "8:00 PM – 10:00 PM",
+    speakers: [
+      { name: "Cheryl Lim", position: "Product Designer @ FeedMe", photo: "/speakers/cheryl.jpg" },
+      { name: "Jocelyn Neo", position: "UI/UX Designer @ Michael Page", photo: "/speakers/jocelyn.jpg" },
+      { name: "Wen Qian Chua", position: "UX Designer @ Jora", photo: "/speakers/wen.jpg" },
+    ],
+  },
+  {
+    num: "02",
+    theme: "Frontend & Deployment",
+    date: "27 Sep 2026",
+    time: "8:00 PM – 10:00 PM",
+    speakers: [
+      { name: "Raziq Din bin Mohd Tasriri", position: "Software Engineering Intern @ Xenber Sdn Bhd", photo: "/speakers/raziq.jpg" },
+    ],
+  },
+  {
+    num: "03",
+    theme: "Backend, Database & Auth",
+    date: "3 Oct 2026",
+    time: "8:00 PM – 10:00 PM",
+    speakers: [
+      { name: "Divyansh Bhatt", position: "Lead Engineer @ Boost", photo: "" },
+    ],
+  },
+  {
+    num: "04",
+    theme: "AI Integration & Domain APIs",
+    date: "4 Oct 2026",
+    time: "8:00 PM – 10:00 PM",
+    speakers: [
+      {
+        name: "Prof. Dr. Nurhizam Safie Mohd Satar",
+        position: "Professor in Digital Transformation, FTSM, Universiti Kebangsaan Malaysia (UKM)",
+        photo: "/speakers/nurhizam.jpg",
+      },
+    ],
+  },
 ];
 
 /* ── Roadmap Timeline ── */
 const roadmap = [
   { date: "10 Aug – 19 Sep 2026", title: "Registration Open", detail: "Teams of 3 to 4 members register through the official portal", type: "phase" },
   { date: "20 Sep 2026", title: "Development Phase Begins", detail: "Teams start designing and building their prototypes", type: "phase" },
-  { date: "26 Sep 2026", title: "Workshop 1", detail: "To be revealed", type: "workshop" },
-  { date: "27 Sep 2026", title: "Workshop 2", detail: "To be revealed", type: "workshop" },
-  { date: "3 Oct 2026", title: "Workshop 3", detail: "To be revealed", type: "workshop" },
-  { date: "4 Oct 2026", title: "Workshop 4", detail: "To be revealed", type: "workshop" },
+  { date: "23 Sep 2026", title: "Workshop 1: Design Thinking", detail: "Cheryl Lim, Jocelyn Neo & Wen Qian Chua", type: "workshop" },
+  { date: "27 Sep 2026", title: "Workshop 2: Frontend & Deployment", detail: "Raziq Din bin Mohd Tasriri (Xenber)", type: "workshop" },
+  { date: "3 Oct 2026", title: "Workshop 3: Backend, DB & Auth", detail: "Divyansh Bhatt (Boost)", type: "workshop" },
+  { date: "4 Oct 2026", title: "Workshop 4: AI & Domain APIs", detail: "Prof. Dr. Nurhizam Safie (UKM)", type: "workshop" },
   { date: "21 Oct 2026", title: "Development Phase Ends", detail: "Final submission deadline for all deliverables", type: "phase" },
   { date: "22 – 28 Oct 2026", title: "Project Assessment", detail: "Judging panel evaluates every submission", type: "phase" },
   { date: "14 Nov 2026", title: "Grand Finale", detail: "Shortlisted teams pitch live at Nadi@UTP", type: "finale" },
@@ -413,7 +412,7 @@ function WorkshopCarousel() {
       {/* Card */}
       <div style={{
         flex: 1,
-        maxWidth: "520px",
+        maxWidth: "600px",
         background: "#fff",
         border: "2px solid rgba(0,196,204,0.3)",
         borderRadius: "20px",
@@ -425,9 +424,24 @@ function WorkshopCarousel() {
         boxShadow: "0 8px 32px rgba(0, 196, 204, 0.12)",
       }}>
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "5px", background: "linear-gradient(90deg, #00c4cc, #00e5a0)", borderRadius: "20px 20px 0 0" }} />
-        <div style={{ fontSize: "clamp(2.4rem, 9vw, 4rem)", fontWeight: 900, color: "#d0f7f3", lineHeight: 1, marginBottom: "16px", letterSpacing: "-0.04em" }}>{ws.num}</div>
-        <h3 style={{ fontSize: "clamp(1.15rem, 4vw, 1.4rem)", fontWeight: 700, color: "#1a1f6e", marginBottom: "10px" }}>{ws.title}</h3>
-        <p style={{ fontSize: "0.95rem", color: "#666", lineHeight: 1.75 }}>{ws.desc}</p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", marginBottom: "12px" }}>
+          <span style={{ fontSize: "clamp(2.4rem, 9vw, 3.4rem)", fontWeight: 900, color: "#d0f7f3", lineHeight: 1, letterSpacing: "-0.04em" }}>{ws.num}</span>
+          <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#00998a", background: "#e6faf6", border: "1px solid #b2eee9", borderRadius: "100px", padding: "4px 10px" }}>Completed</span>
+        </div>
+        <div style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#009999", marginBottom: "6px" }}>Workshop {Number(ws.num)}</div>
+        <h3 style={{ fontSize: "clamp(1.15rem, 4vw, 1.45rem)", fontWeight: 800, color: "#1a1f6e", marginBottom: "10px", lineHeight: 1.3 }}>{ws.theme}</h3>
+        <p style={{ fontSize: "0.85rem", color: "#666", marginBottom: "24px" }}>
+          📅 {ws.date} · 🕗 {ws.time}
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "20px" }}>
+          {ws.speakers.map((sp) => (
+            <div key={sp.name} style={{ width: ws.speakers.length > 1 ? "130px" : "220px" }}>
+              <Avatar name={sp.name} photo={sp.photo} size={ws.speakers.length > 1 ? 84 : 104} />
+              <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.9rem", marginTop: "10px", lineHeight: 1.3 }}>{sp.name}</div>
+              <div style={{ fontSize: "0.75rem", color: "#777", marginTop: "4px", lineHeight: 1.45 }}>{sp.position}</div>
+            </div>
+          ))}
+        </div>
 
         {/* Dots indicator */}
         <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginTop: "28px" }}>
@@ -475,6 +489,84 @@ function WorkshopCarousel() {
         </svg>
       </button>
     </div>
+  );
+}
+
+/* ── Avatar (photo or initials fallback) ── */
+function initialsOf(name: string) {
+  const skip = new Set(["bin", "binti", "a/l", "a/p", "prof.", "dr.", "ap.", "ts."]);
+  const parts = name.split(/\s+/).filter((p) => !skip.has(p.toLowerCase()));
+  return ((parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "")).toUpperCase();
+}
+
+function Avatar({ name, photo, size }: { name: string; photo?: string; size: number }) {
+  return (
+    <div style={{ width: size, height: size, borderRadius: "50%", overflow: "hidden", margin: "0 auto", border: "3px solid #fff", boxShadow: "0 0 0 2px #b2eee9, 0 6px 16px rgba(26,31,110,0.12)", background: "linear-gradient(135deg,#00c4cc,#00e5a0)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      {photo ? (
+        <Image src={photo} alt={name} width={size * 2} height={size * 2} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      ) : (
+        <span style={{ color: "#1a1f6e", fontWeight: 800, fontSize: size * 0.34 }}>{initialsOf(name)}</span>
+      )}
+    </div>
+  );
+}
+
+/* ── Organizing Committee ── */
+function MemberCard({ m, featured = false }: { m: Member; featured?: boolean }) {
+  return (
+    <div className="member-card" style={{ background: "#fff", border: "1px solid #d0f5f0", borderRadius: "16px", overflow: "hidden", boxShadow: featured ? "0 10px 28px rgba(26,31,110,0.12)" : "0 4px 14px rgba(26,31,110,0.06)" }}>
+      <div style={{ aspectRatio: "3 / 4", background: "linear-gradient(140deg,#00c4cc,#00e5a0)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+        {m.photo ? (
+          <Image src={`/committee/${m.photo}.jpg`} alt={m.name} fill sizes="(max-width: 640px) 45vw, 220px" style={{ objectFit: "cover" }} />
+        ) : (
+          <span style={{ color: "#1a1f6e", fontWeight: 900, fontSize: "2.4rem", opacity: 0.8 }}>{initialsOf(m.name)}</span>
+        )}
+      </div>
+      <div style={{ padding: "12px 14px 16px" }}>
+        <div style={{ fontSize: "0.66rem", fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: "#009999", marginBottom: "4px" }}>{m.role}</div>
+        <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.86rem", lineHeight: 1.35 }}>{m.name}</div>
+      </div>
+    </div>
+  );
+}
+
+function CommitteeSection() {
+  const [active, setActive] = useState(departments[0].id);
+  const dept = departments.find((d) => d.id === active) ?? departments[0];
+  return (
+    <>
+      <div className="committee-row" style={{ marginBottom: "18px" }}>
+        {advisors.map((m) => <MemberCard key={m.name} m={m} featured />)}
+      </div>
+      <div className="committee-row" style={{ marginBottom: "56px" }}>
+        {highCommittee.map((m) => <MemberCard key={m.name} m={m} featured />)}
+      </div>
+
+      <div style={{ textAlign: "center", marginBottom: "24px" }}>
+        <h3 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#1a1f6e" }}>Executive Committee</h3>
+      </div>
+      <div role="tablist" aria-label="Departments" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px", marginBottom: "32px" }}>
+        {departments.map((d) => (
+          <button
+            key={d.id}
+            role="tab"
+            aria-selected={d.id === active}
+            onClick={() => setActive(d.id)}
+            style={{
+              padding: "8px 16px", borderRadius: "100px", fontSize: "0.82rem", fontWeight: 700, cursor: "pointer", transition: "all 0.2s",
+              border: d.id === active ? "2px solid #00c4cc" : "2px solid #d0f5f0",
+              background: d.id === active ? "#00c4cc" : "#fff",
+              color: d.id === active ? "#fff" : "#1a1f6e",
+            }}
+          >
+            {d.label}
+          </button>
+        ))}
+      </div>
+      <div className="committee-row">
+        {dept.members.map((m) => <MemberCard key={m.name} m={m} />)}
+      </div>
+    </>
   );
 }
 
@@ -543,18 +635,7 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 
 /* ── Main ── */
 export default function Page() {
-  const [showRegModal, setShowRegModal] = useState(false);
-  const countdown = useCountdown(REGISTRATION_OPEN_MS);
-
-  const REG_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdsvLNidOPzGukcNwHKBozf1qAmRaWMUMmwCILiCLMrmYcHsA/viewform?usp=header";
-
-  const handleRegister = () => {
-    if (Date.now() >= REGISTRATION_FORM_OPEN_MS) {
-      window.open(REG_FORM_URL, "_blank", "noopener,noreferrer");
-    } else {
-      setShowRegModal(true);
-    }
-  };
+  const countdown = useCountdown(FINALE_MS);
 
   const phases = [
     { num: "01", name: "Registration", date: "10 Aug – 19 Sep 2026", desc: "Form your team of 3–4 and sign up via the online portal. All local universities welcome." },
@@ -565,18 +646,18 @@ export default function Page() {
 
   const faqs = [
     { q: "Who can participate in CodeFest '26?", a: "All undergraduate students from any local university. Teams must consist of 3 to 4 members." },
-    { q: "What is the registration fee?", a: "RM 30 per team. Registration opens on 10 August 2026 via our online portal." },
+    { q: "Is registration still open?", a: "No. Registration closed on 19 September 2026, and the 10 Grand Finalist teams have been announced. Check the Finalists section above." },
     { q: "What kind of projects are expected?", a: "Functional prototypes or MVPs addressing societal challenges using AI, cloud computing, cybersecurity, or software engineering." },
     { q: "Is the competition fully online?", a: "Preliminary phases are online. The Grand Finale on 14 November 2026 is a physical event at Nadi@UTP, Universiti Teknologi PETRONAS." },
-    // { q: "What do winners receive?", a: "1st place RM 1,000 · 2nd place RM 700 · 3rd place RM 500 · People's Choice RM 100. All finishers receive a Certificate of Participation." },
+    { q: "What do winners receive?", a: "Champion RM 1,200 · 1st Runner-up RM 900 · 2nd Runner-up RM 600 · People's Choice Award RM 200. All teams that complete the full competition cycle receive a Certificate of Participation." },
     { q: "Who organizes CodeFest '26?", a: "SYNTECH Organization at UTP, co-organised by the Department of Computing (DC), supported by Student Affairs (SA) and YUTP." },
-    { q: "When is the track and rulebook will be released?", a: "Rulebook and track details will be released after the registration phase." },
+    { q: "Can I attend the Grand Finale as a visitor?", a: "Yes. The public exhibition at Nadi@UTP on 14 November 2026 is open to all students and visitors. Come see live demos and watch the finalists pitch." },
+    { q: "How do I get to Nadi@UTP?", a: "Watch the short directions video in the Venue section above, or open Nadi@UTP in Google Maps from the same section." },
   ];
 
   return (
     <>
-      {showRegModal && <RegModal onClose={() => setShowRegModal(false)} />}
-      <Nav onRegister={handleRegister} />
+      <Nav />
 
       {/* ── HERO ── */}
       <section className="hero-bg" style={{ paddingTop: "88px", paddingBottom: "80px", minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
@@ -657,7 +738,7 @@ export default function Page() {
               </p>
 
               <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "36px" }}>
-                <a href="#register" onClick={(e) => { e.preventDefault(); handleRegister(); }} className="btn-primary">Register Now →</a>
+                <a href="#venue" className="btn-primary">Getting to Nadi@UTP →</a>
                 <a href="#about" className="btn-outline">Learn More</a>
               </div>
 
@@ -666,7 +747,7 @@ export default function Page() {
                 {[
                   { icon: "📅", text: "10 Aug – 14 Nov 2026" },
                   { icon: "📍", text: "Nadi@UTP, Universiti Teknologi PETRONAS" },
-                  { icon: "💰", text: "RM 30 / team" },
+                  { icon: "🏁", text: "Grand Finale · Sat, 14 Nov 2026" },
                 ].map(({ icon, text }) => (
                   <span key={text} style={{ background: "rgba(26,31,110,0.75)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "100px", padding: "7px 16px", fontSize: "0.8rem", fontWeight: 600, backdropFilter: "blur(8px)" }}>
                     {icon} {text}
@@ -679,7 +760,7 @@ export default function Page() {
             <div className="hero-right">
               <div style={{ textAlign: "center" }}>
                 <p style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: "12px" }}>
-                  Registration Closes In
+                  Grand Finale Begins In
                 </p>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <CountdownBox value={countdown.days} label="Days" />
@@ -691,7 +772,7 @@ export default function Page() {
 
               <div className="stats-grid">
                 {[
-                  { val: "Coming Soon", sub: "Total Prize Pool" },
+                  { val: "RM 2,900", sub: "Total Prize Pool" },
                   { val: "30 Teams", sub: "Max Capacity" },
                   { val: "3 Months", sub: "Competition Duration" },
                   { val: "National", sub: "Level Competition" },
@@ -721,7 +802,7 @@ export default function Page() {
                   <strong style={{ color: "#1a1f6e"}}>SYNTECH Organization</strong> is a student-led technology club at Universiti Teknologi PETRONAS dedicated to bridging the gap between academic theory and industry practice. Our mission is to transform curiosity into impactful technology through hands-on experience and holistic leadership.
                 </p>
                 <p style={{ color: "#555", lineHeight: 1.8, marginBottom: "32px" }}>
-                  CodeFest &apos;26 is our flagship intervarsity coding competition organized under the theme "Innovating for the People, by the People". This initiative serves as a high-impact platform for university students across Malaysia to sharpen their technical expertise by developing a website or app that addresses specific societal challenges. Participants will also have the opportunity to engage directly with industry leaders in fields such as artificial intelligence, software engineering, and cybersecurity through corporate exhibitions and specialized workshops.
+                  CodeFest &apos;26 is our flagship intervarsity coding competition organized under the theme &ldquo;Innovating for the People, by the People&rdquo;. This initiative serves as a high-impact platform for university students across Malaysia to sharpen their technical expertise by developing a website or app that addresses specific societal challenges. Participants will also have the opportunity to engage directly with industry leaders in fields such as artificial intelligence, software engineering, and cybersecurity through corporate exhibitions and specialized workshops.
                 </p>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
@@ -809,28 +890,28 @@ export default function Page() {
           <div className="prizes-podium">
             <div className="prize-runner">
               <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🥈</div>
-              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#009999", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>2nd Place</div>
-              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>Coming Soon</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#009999", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>1st Runner-up</div>
+              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>RM 900</div>
               <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>+ Certificate</div>
             </div>
             <div className="prize-first">
               <div style={{ fontSize: "2.4rem", marginBottom: "14px" }}>🏆</div>
               <div style={{ fontSize: "0.68rem", fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.75, marginBottom: "8px" }}>Champion</div>
-              <div style={{ fontSize: "3.2rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1 }}>Coming Soon</div>
+              <div style={{ fontSize: "3.2rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1 }}>RM 1,200</div>
               <div style={{ fontSize: "0.8rem", marginTop: "10px", opacity: 0.75 }}>+ Plaque + Certificate</div>
             </div>
             <div className="prize-third">
               <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🥉</div>
-              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#1a1f6e", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>3rd Place</div>
-              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>Coming Soon</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#1a1f6e", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>2nd Runner-up</div>
+              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>RM 600</div>
               <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>+ Certificate</div>
             </div>
           </div>
           <div className="prizes-extra">
             <div style={{ flex: 1, background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "24px", textAlign: "center" }}>
               <div style={{ fontSize: "1.6rem", marginBottom: "8px" }}>❤️</div>
-              <div style={{ fontWeight: 700, color: "#1a1f6e", marginBottom: "4px" }}>People&apos;s Choice</div>
-              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#009999" }}>Coming Soon</div>
+              <div style={{ fontWeight: 700, color: "#1a1f6e", marginBottom: "4px" }}>People&apos;s Choice Award</div>
+              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#009999" }}>RM 200</div>
             </div>
             <div style={{ flex: 2, background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "24px", display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{ fontSize: "2rem" }}>📜</div>
@@ -866,132 +947,144 @@ export default function Page() {
               Workshops
             </h2>
             <p style={{ color: "#666", maxWidth: "540px", margin: "16px auto 0", lineHeight: 1.75 }}>
-              Sharpen your skills with 4 expert-led workshops designed to prepare you for the competition and beyond.
+              Four expert-led sessions that took teams from design thinking to deployment during the development phase.
             </p>
           </div>
           <WorkshopCarousel />
         </div>
       </section>
 
-      {/* ── REGISTER CTA ── */}
+      {/* ── GRAND FINALISTS ── */}
+      <section id="finalists" style={{ padding: "96px 24px" }}>
+        <div className="max-w-6xl mx-auto">
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <span className="section-eyebrow">Top 10 · Preliminary Round Results</span>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
+              Meet the Grand Finalists
+            </h2>
+            <p style={{ color: "#666", maxWidth: "560px", margin: "16px auto 0", lineHeight: 1.75 }}>
+              Congratulations to the 10 teams advancing to the Grand Finale. See them pitch live at Nadi@UTP on 14 November 2026.
+            </p>
+          </div>
+          <div className="finalists-grid">
+            {finalists.map((team, i) => (
+              <div key={team} className="finalist-card">
+                <div style={{ fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.12em", color: "#00998a", marginBottom: "10px" }}>FINALIST {String(i + 1).padStart(2, "0")}</div>
+                <div style={{ fontWeight: 800, color: "#1a1f6e", fontSize: "1.1rem", lineHeight: 1.3 }}>{team}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── VENUE / GETTING THERE ── */}
+      <section id="venue" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
+        <div className="max-w-6xl mx-auto">
+          <div style={{ textAlign: "center", marginBottom: "56px" }}>
+            <span className="section-eyebrow">Grand Finale · Saturday, 14 November 2026</span>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
+              Getting to Nadi@UTP
+            </h2>
+            <p style={{ color: "#666", maxWidth: "560px", margin: "16px auto 0", lineHeight: 1.75 }}>
+              The Grand Finale is held in person at Nadi@UTP, Universiti Teknologi PETRONAS. Watch the short walkthrough below so you know exactly where to go on the day.
+            </p>
+          </div>
+
+          <div className="venue-grid">
+            {/* Video */}
+            <div style={{ borderRadius: "20px", overflow: "hidden", background: "#0a2a2a", boxShadow: "0 12px 36px rgba(26,31,110,0.15)", aspectRatio: "16 / 9", position: "relative" }}>
+              <iframe
+                src={NADI_VIDEO_EMBED}
+                title="How to get to Nadi@UTP"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+                loading="lazy"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
+              />
+            </div>
+
+            {/* Details */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {[
+                { icon: "📍", label: "Venue", value: "Nadi@UTP, Universiti Teknologi PETRONAS", sub: "32610 Bandar Seri Iskandar, Perak" },
+                { icon: "📅", label: "Date", value: "Saturday, 14 November 2026", sub: "Finalists arrive from 9:00 AM" },
+                { icon: "🎟️", label: "Public Exhibition", value: "Open to all students & visitors", sub: "Live demos at the finalist booths" },
+              ].map(({ icon, label, value, sub }) => (
+                <div key={label} style={{ background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "18px 20px", display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                  <div style={{ fontSize: "1.5rem", lineHeight: 1 }}>{icon}</div>
+                  <div>
+                    <div style={{ fontSize: "0.68rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#009999", marginBottom: "4px" }}>{label}</div>
+                    <div style={{ fontWeight: 700, color: "#1a1f6e" }}>{value}</div>
+                    <div style={{ fontSize: "0.83rem", color: "#666", marginTop: "2px" }}>{sub}</div>
+                  </div>
+                </div>
+              ))}
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                <a href={NADI_MAPS_URL} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ flex: 1, textAlign: "center", whiteSpace: "nowrap", padding: "13px 20px" }}>Open in Maps ↗</a>
+                <a href={NADI_VIDEO_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ flex: 1, textAlign: "center", whiteSpace: "nowrap" }}>Watch Video ↗</a>
+              </div>
+            </div>
+          </div>
+
+          {/* Tentative programme */}
+          <div style={{ marginTop: "64px" }}>
+            <h3 style={{ textAlign: "center", fontSize: "1.3rem", fontWeight: 800, color: "#1a1f6e", marginBottom: "6px" }}>Finale Day Programme</h3>
+            <p style={{ textAlign: "center", fontSize: "0.82rem", color: "#888", marginBottom: "28px" }}>Tentative and subject to change</p>
+            <div className="schedule-grid">
+              {finaleSchedule.map((item) => (
+                <div key={item.time} style={{ background: "#fff", border: "1px solid #d0f5f0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "14px" }}>
+                  <div style={{ fontWeight: 800, color: "#00998a", fontSize: "0.85rem", minWidth: "72px" }}>{item.time}</div>
+                  <div>
+                    <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.95rem" }}>{item.activity}</div>
+                    <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "2px", lineHeight: 1.5 }}>{item.detail}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FINALE CTA ── */}
       <section id="register" className="hero-bg" style={{ padding: "96px 24px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: -80, right: -100, opacity: 0.25, zIndex: 1 }} className="arch-float-slow">
           <Arch size={500} strokeColor="#1a1f6e" />
         </div>
         <div className="max-w-3xl mx-auto" style={{ textAlign: "center", position: "relative", zIndex: 2 }}>
           <span style={{ display: "inline-block", background: "rgba(26,31,110,0.2)", color: "#fff", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", padding: "6px 14px", borderRadius: "100px", marginBottom: "20px", border: "1px solid rgba(255,255,255,0.3)" }}>
-            Registration Opens 10 August 2026
+            Registration Closed · Finale on 14 November 2026
           </span>
           <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", marginBottom: "16px", lineHeight: 1.15 }}>
-            Ready to Build Something<br />That Matters?
+            See You at the<br />Grand Finale
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.85)", lineHeight: 1.75, fontSize: "1.05rem", marginBottom: "40px", maxWidth: "520px", margin: "0 auto 40px" }}>
-            Form your team, register for RM 30, and compete on a national stage at Universiti Teknologi PETRONAS.
+          <p style={{ color: "rgba(255,255,255,0.85)", lineHeight: 1.75, fontSize: "1.05rem", maxWidth: "520px", margin: "0 auto 40px" }}>
+            Watch the finalists pitch live, explore their booths and celebrate the winners with us at Nadi@UTP, Universiti Teknologi PETRONAS.
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="#" onClick={(e) => { e.preventDefault(); handleRegister(); }} style={{ background: "#1a1f6e", color: "#fff", padding: "14px 36px", borderRadius: "8px", fontWeight: 800, fontSize: "1rem", textDecoration: "none", transition: "background 0.2s", display: "inline-block" }}
+            <a href="#venue" style={{ background: "#1a1f6e", color: "#fff", padding: "14px 36px", borderRadius: "8px", fontWeight: 800, fontSize: "1rem", textDecoration: "none", transition: "background 0.2s", display: "inline-block" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#243040")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}>
-              Register Your Team
+              How to Get There
             </a>
-            {/* <a href="#" className="btn-outline">Download Rulebook</a>  */}
           </div>
         </div>
       </section>
 
-      {/* ── COLLABORATORS ──
-      <section id="collaborators" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
+      {/* ── ORGANIZING COMMITTEE ── */}
+      <section id="committee" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
         <div className="max-w-6xl mx-auto">
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span className="section-eyebrow">Our Partners</span>
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <span className="section-eyebrow">The Team Behind CodeFest &apos;26</span>
             <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
-              Collaborators
+              Organizing Committee
             </h2>
-            <p style={{ color: "#666", maxWidth: "540px", margin: "16px auto 0", lineHeight: 1.75 }}>
-              Organizations and institutions who make CodeFest &apos;26 possible.
+            <p style={{ color: "#666", maxWidth: "560px", margin: "16px auto 0", lineHeight: 1.75 }}>
+              Students of SYNTECH Organization across six departments, working together to bring CodeFest &apos;26 to life.
             </p>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "32px", alignItems: "center" }}>
-            {["Collaborator 1", "Collaborator 2", "Collaborator 3", "Collaborator 4", "Collaborator 5"].map((name) => (
-              <div key={name} style={{ background: "#fff", border: "1px solid #b2eee9", borderRadius: "16px", padding: "32px 48px", textAlign: "center", minWidth: "180px" }}>
-                <div style={{ width: "80px", height: "80px", background: "#e8f9f7", borderRadius: "12px", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600 }}>Logo</span>
-                </div>
-                <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.9rem" }}>{name}</div>
-              </div>
-            ))}
-          </div>
+          <CommitteeSection />
         </div>
-      </section> */}
-
-
-      {/* <section id="sponsors" style={{ padding: "96px 24px" }}>
-        <div className="max-w-6xl mx-auto">
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span className="section-eyebrow">Backed By The Best</span>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
-              Sponsors
-            </h2>
-          </div> */}
-
-      {/* Gold
-          <div style={{ marginBottom: "48px" }}>
-            <div style={{ textAlign: "center", marginBottom: "24px" }}>
-              <span style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1f6e", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                🥇 Gold Sponsors
-              </span>
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "24px" }}>
-              {["Gold Sponsor 1"].map((name) => (
-                <div key={name} style={{ background: "#fff", border: "2px solid #FFD700", borderRadius: "16px", padding: "36px 56px", textAlign: "center", minWidth: "200px" }}>
-                  <div style={{ width: "100px", height: "100px", background: "#fffbe6", borderRadius: "12px", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600 }}>Logo</span>
-                  </div>
-                  <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.95rem" }}>{name}</div>
-                </div>
-              ))}
-            </div>
-          </div> */}
-
-      {/* Silver
-          <div style={{ marginBottom: "48px" }}>
-            <div style={{ textAlign: "center", marginBottom: "24px" }}>
-              <span style={{ background: "linear-gradient(135deg, #C0C0C0, #A0A0A0)", color: "#fff", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                🥈 Silver Sponsors
-              </span>
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "24px" }}>
-              {["Silver Sponsor 1", "Silver Sponsor 2"].map((name) => (
-                <div key={name} style={{ background: "#fff", border: "2px solid #C0C0C0", borderRadius: "16px", padding: "28px 44px", textAlign: "center", minWidth: "180px" }}>
-                  <div style={{ width: "80px", height: "80px", background: "#f5f5f5", borderRadius: "12px", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600 }}>Logo</span>
-                  </div>
-                  <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.9rem" }}>{name}</div>
-                </div>
-              ))}
-            </div>
-          </div> */}
-
-      {/* Bronze */}
-      {/* <div>
-            <div style={{ textAlign: "center", marginBottom: "24px" }}>
-              <span style={{ background: "linear-gradient(135deg, #CD7F32, #A0522D)", color: "#fff", fontSize: "0.72rem", fontWeight: 800, padding: "6px 18px", borderRadius: "100px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                🥉 Bronze Sponsors
-              </span>
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "24px" }}>
-              {["Bronze Sponsor 1", "Bronze Sponsor 2", "Bronze Sponsor 3"].map((name) => (
-                <div key={name} style={{ background: "#fff", border: "2px solid #CD7F32", borderRadius: "16px", padding: "24px 36px", textAlign: "center", minWidth: "160px" }}>
-                  <div style={{ width: "64px", height: "64px", background: "#fdf5ee", borderRadius: "12px", margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600 }}>Logo</span>
-                  </div>
-                  <div style={{ fontWeight: 700, color: "#1a1f6e", fontSize: "0.85rem" }}>{name}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section> */}
+      </section>
 
       {/* ── FAQ ── */}
       <section id="faq" style={{ padding: "96px 24px" }}>
@@ -1055,7 +1148,7 @@ export default function Page() {
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.45, marginBottom: "16px" }}>Quick Links</div>
-              {["About", "Timeline", "Prizes", "Roadmap", "Workshops", "FAQ"].map((link) => (
+              {NAV_LINKS.map((link) => (
                 <a key={link} href={`#${link.toLowerCase()}`} style={{ display: "block", color: "rgba(255,255,255,0.55)", textDecoration: "none", marginBottom: "10px", fontSize: "0.875rem", transition: "color 0.2s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#00e5a0")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}>

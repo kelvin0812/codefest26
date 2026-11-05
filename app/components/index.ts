@@ -1,9 +1,0 @@
-export { Nav } from "./Nav";
-export { Hero } from "./Hero";
-export { About } from "./About";
-export { Timeline } from "./Timeline";
-export { Prizes } from "./Prizes";
-export { Schedule } from "./Schedule";
-export { RegisterCTA } from "./RegisterCTA";
-export { FAQ } from "./FAQ";
-export { Footer } from "./Footer";
