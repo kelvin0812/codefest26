@@ -2,6 +2,9 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import SiteNav from "./components/SiteNav";
+import SiteFooter from "./components/SiteFooter";
 import { advisors, highCommittee, departments, type Member } from "./data/committee";
 
 /* ── Arch SVG ── */
@@ -27,133 +30,6 @@ function Arch({ size = 260, strokeColor = "#2e3491", className = "" }: { size?: 
     </svg>
   );
 }
-
-/* ── Countdown ── */
-function useCountdown(targetMs: number) {
-  const [diff, setDiff] = useState(0);
-  useEffect(() => {
-    const tick = () => setDiff(Math.max(0, targetMs - Date.now()));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [targetMs]);
-  const s = Math.floor(diff / 1000);
-  return {
-    days: Math.floor(s / 86400),
-    hours: Math.floor((s % 86400) / 3600),
-    minutes: Math.floor((s % 3600) / 60),
-    seconds: s % 60,
-  };
-}
-
-function CountdownBox({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="countdown-box">
-      <div className="countdown-num">{String(value).padStart(2, "0")}</div>
-      <div className="countdown-label">{label}</div>
-    </div>
-  );
-}
-
-/* ── Nav ── */
-const NAV_LINKS = ["About", "Timeline", "Prizes", "Roadmap", "Workshops", "Finalists", "Venue", "Committee", "FAQ"];
-
-function Nav() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled || menuOpen ? "nav-scrolled shadow-lg" : "nav-blur"}`}>
-      <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-        <div className="flex items-center gap-2">
-          <Image src="/logo.png" alt="CodeFest '26 Logo" width={36} height={36} style={{ filter: "brightness(0) invert(1)" }} />
-          <span style={{ fontWeight: 800, color: "#fff", fontSize: "1rem", letterSpacing: "-0.01em", textShadow: "0 1px 4px rgba(0,0,0,0.2)", fontFamily: "'Mokoto', monospace" }}>
-            CODEFEST <span style={{ color: "#00e5a0" }}>&apos;26</span>
-          </span>
-        </div>
-
-        <div className="hidden xl:flex items-center gap-7 text-sm font-medium">
-          {NAV_LINKS.map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              style={{ textDecoration: "none", color: "rgba(255,255,255,0.85)", transition: "color 0.2s" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#00e5a0")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.85)")}
-            >
-              {item}
-            </a>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-3">
-          <a
-            href="#venue"
-            onClick={() => setMenuOpen(false)}
-            className="hidden sm:inline-block"
-            style={{
-              background: "#1a1f6e",
-              color: "#fff",
-              padding: "9px 22px",
-              borderRadius: "8px",
-              fontWeight: 700,
-              fontSize: "0.85rem",
-              textDecoration: "none",
-              transition: "background 0.2s",
-              border: "1px solid rgba(255,255,255,0.15)",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#00c4cc")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}
-          >
-            Get Directions
-          </a>
-
-          <button
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            className="xl:hidden flex flex-col"
-            style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", gap: "5px" }}
-          >
-            <span style={{ width: "22px", height: "2px", background: "#fff", transition: "transform 0.2s", transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none" }} />
-            <span style={{ width: "22px", height: "2px", background: "#fff", opacity: menuOpen ? 0 : 1, transition: "opacity 0.2s" }} />
-            <span style={{ width: "22px", height: "2px", background: "#fff", transition: "transform 0.2s", transform: menuOpen ? "translateY(-7px) rotate(-45deg)" : "none" }} />
-          </button>
-        </div>
-      </div>
-
-      {menuOpen && (
-        <div className="xl:hidden flex flex-col" style={{ background: "rgba(0, 60, 80, 0.97)", borderTop: "1px solid rgba(255,255,255,0.1)", padding: "8px 24px 20px" }}>
-          {NAV_LINKS.map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              onClick={() => setMenuOpen(false)}
-              style={{ textDecoration: "none", color: "rgba(255,255,255,0.9)", padding: "12px 0", fontSize: "1rem", fontWeight: 600, borderBottom: "1px solid rgba(255,255,255,0.08)" }}
-            >
-              {item}
-            </a>
-          ))}
-          <a
-            href="#venue"
-            onClick={() => setMenuOpen(false)}
-            style={{ marginTop: "16px", background: "#1a1f6e", color: "#fff", padding: "12px 22px", borderRadius: "8px", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none", textAlign: "center" }}
-          >
-            Get Directions
-          </a>
-        </div>
-      )}
-    </nav>
-  );
-}
-
-/* Grand Finale start (Malaysia time, UTC+8) — drives the hero countdown */
-const FINALE_MS = new Date("2026-11-14T09:00:00+08:00").getTime();
 
 /* ── Venue ── */
 // Directions video hosted on Google Drive (sharing: anyone with the link can view)
@@ -186,6 +62,14 @@ const finalists = [
   "Ayam Gepuk Tokpa",
   "AI Don't Know",
 ];
+
+/* ── Grand Finale winners (14 Nov 2026) ── */
+const winners = {
+  champion: { team: "AI Don't Know", project: "Coinvoy", prize: "RM 1,200" },
+  firstRunnerUp: { team: "EAQ", project: "GHST", prize: "RM 900" },
+  secondRunnerUp: { team: "Nexora", project: "Kawan", prize: "RM 600" },
+  peoplesChoice: { team: "AI Don't Know", project: "Coinvoy", prize: "RM 200" },
+};
 
 /* ── Workshop Carousel ── */
 type Speaker = { name: string; position: string; photo: string };
@@ -244,7 +128,7 @@ const roadmap = [
   { date: "4 Oct 2026", title: "Workshop 4: AI & Domain APIs", detail: "Prof. Dr. Nurhizam Safie (UKM)", type: "workshop" },
   { date: "21 Oct 2026", title: "Development Phase Ends", detail: "Final submission deadline for all deliverables", type: "phase" },
   { date: "22 – 28 Oct 2026", title: "Project Assessment", detail: "Judging panel evaluates every submission", type: "phase" },
-  { date: "14 Nov 2026", title: "Grand Finale", detail: "Shortlisted teams pitch live at Nadi@UTP", type: "finale" },
+  { date: "14 Nov 2026", title: "Grand Finale", detail: "Shortlisted teams pitched live at Nadi@UTP", type: "finale" },
 ];
 
 const ROADMAP_COLORS: Record<string, string> = {
@@ -635,29 +519,26 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 
 /* ── Main ── */
 export default function Page() {
-  const countdown = useCountdown(FINALE_MS);
-
   const phases = [
     { num: "01", name: "Registration", date: "10 Aug – 19 Sep 2026", desc: "Form your team of 3–4 and sign up via the online portal. All local universities welcome." },
     { num: "02", name: "Development & Submission", date: "20 Sep – 21 Oct 2026", desc: "Build your working prototype or MVP addressing a real societal challenge. Submit all files by 21 Oct." },
     { num: "03", name: "Project Assessment", date: "22 – 28 Oct 2026", desc: "Judges evaluate submissions on creativity, technical skill, and real-world impact. Top teams proceed." },
-    { num: "04", name: "Grand Finale", date: "14 Nov 2026 · Nadi@UTP", desc: "Selected finalists pitch live to industry judges. Winners announced at the award ceremony." },
+    { num: "04", name: "Grand Finale", date: "14 Nov 2026 · Nadi@UTP", desc: "The 10 finalists pitched live to industry judges, and the winners were announced at the award ceremony." },
   ];
 
   const faqs = [
     { q: "Who can participate in CodeFest '26?", a: "All undergraduate students from any local university. Teams must consist of 3 to 4 members." },
-    { q: "Is registration still open?", a: "No. Registration closed on 19 September 2026, and the 10 Grand Finalist teams have been announced. Check the Finalists section above." },
+    { q: "Is registration still open?", a: "No. Registration closed on 19 September 2026, and the Grand Finale took place on 14 November 2026. See the Winners section above for the results." },
     { q: "What kind of projects are expected?", a: "Functional prototypes or MVPs addressing societal challenges using AI, cloud computing, cybersecurity, or software engineering." },
-    { q: "Is the competition fully online?", a: "Preliminary phases are online. The Grand Finale on 14 November 2026 is a physical event at Nadi@UTP, Universiti Teknologi PETRONAS." },
+    { q: "Is the competition fully online?", a: "The preliminary phases were online. The Grand Finale on 14 November 2026 was a physical event at Nadi@UTP, Universiti Teknologi PETRONAS." },
     { q: "What do winners receive?", a: "Champion RM 1,200 · 1st Runner-up RM 900 · 2nd Runner-up RM 600 · People's Choice Award RM 200. All teams that complete the full competition cycle receive a Certificate of Participation." },
     { q: "Who organizes CodeFest '26?", a: "SYNTECH Organization at UTP, co-organised by the Department of Computing (DC), supported by Student Affairs (SA) and YUTP." },
-    { q: "Can I attend the Grand Finale as a visitor?", a: "Yes. The public exhibition at Nadi@UTP on 14 November 2026 is open to all students and visitors. Come see live demos and watch the finalists pitch." },
     { q: "How do I get to Nadi@UTP?", a: "Watch the short directions video in the Venue section above, or open Nadi@UTP in Google Maps from the same section." },
   ];
 
   return (
     <>
-      <Nav />
+      <SiteNav home />
 
       {/* ── HERO ── */}
       <section className="hero-bg" style={{ paddingTop: "88px", paddingBottom: "80px", minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
@@ -738,7 +619,7 @@ export default function Page() {
               </p>
 
               <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "36px" }}>
-                <a href="#venue" className="btn-primary">Getting to Nadi@UTP →</a>
+                <a href="#winners" className="btn-primary">Meet the Winners →</a>
                 <a href="#about" className="btn-outline">Learn More</a>
               </div>
 
@@ -747,7 +628,7 @@ export default function Page() {
                 {[
                   { icon: "📅", text: "10 Aug – 14 Nov 2026" },
                   { icon: "📍", text: "Nadi@UTP, Universiti Teknologi PETRONAS" },
-                  { icon: "🏁", text: "Grand Finale · Sat, 14 Nov 2026" },
+                  { icon: "🏁", text: "Grand Finale held · Sat, 14 Nov 2026" },
                 ].map(({ icon, text }) => (
                   <span key={text} style={{ background: "rgba(26,31,110,0.75)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "100px", padding: "7px 16px", fontSize: "0.8rem", fontWeight: 600, backdropFilter: "blur(8px)" }}>
                     {icon} {text}
@@ -756,18 +637,18 @@ export default function Page() {
               </div>
             </div>
 
-            {/* Right — countdown + stats */}
+            {/* Right — champion + stats */}
             <div className="hero-right">
-              <div style={{ textAlign: "center" }}>
+              <div style={{ textAlign: "center", width: "100%" }}>
                 <p style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: "12px" }}>
-                  Grand Finale Begins In
+                  Grand Finale · 14 Nov 2026
                 </p>
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <CountdownBox value={countdown.days} label="Days" />
-                  <CountdownBox value={countdown.hours} label="Hours" />
-                  <CountdownBox value={countdown.minutes} label="Mins" />
-                  <CountdownBox value={countdown.seconds} label="Secs" />
-                </div>
+                <a href="#winners" className="countdown-box" style={{ display: "block", textDecoration: "none", padding: "24px 28px" }}>
+                  <div style={{ fontSize: "1.8rem", lineHeight: 1, marginBottom: "10px" }} aria-hidden="true">🏆</div>
+                  <div className="countdown-label" style={{ marginTop: 0, marginBottom: "8px", opacity: 0.75 }}>CodeFest &apos;26 Champion</div>
+                  <div style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1.1 }}>{winners.champion.team}</div>
+                  <div style={{ fontSize: "0.85rem", color: "#00e5a0", fontWeight: 700, marginTop: "8px" }}>{winners.champion.project} · See all winners →</div>
+                </a>
               </div>
 
               <div className="stats-grid">
@@ -783,6 +664,52 @@ export default function Page() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── WINNERS ── */}
+      <section id="winners" style={{ padding: "96px 24px" }}>
+        <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto">
+          <div style={{ textAlign: "center", marginBottom: "56px" }}>
+            <span className="section-eyebrow">Grand Finale Results · 14 November 2026</span>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
+              Congratulations to Our Winners
+            </h2>
+            <p style={{ color: "#666", maxWidth: "560px", margin: "16px auto 0", lineHeight: 1.75 }}>
+              After a day of live demos and final pitches at Nadi@UTP, the judges have chosen the CodeFest &apos;26 winners. Thank you to every team who took part.
+            </p>
+          </div>
+          <div className="prizes-podium">
+            <div className="prize-runner">
+              <div style={{ fontSize: "2rem", marginBottom: "12px" }} aria-hidden="true">🥈</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#009999", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>1st Runner-up</div>
+              <div style={{ fontSize: "1.8rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.02em", lineHeight: 1.15 }}>{winners.firstRunnerUp.team}</div>
+              <div style={{ fontSize: "0.9rem", color: "#555", marginTop: "6px" }}>Project: <strong style={{ color: "#1a1f6e" }}>{winners.firstRunnerUp.project}</strong></div>
+              <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>{winners.firstRunnerUp.prize} + Certificate</div>
+            </div>
+            <div className="prize-first order-first min-[769px]:order-none">
+              <div style={{ fontSize: "2.4rem", marginBottom: "14px" }} aria-hidden="true">🏆</div>
+              <div style={{ fontSize: "0.68rem", fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.75, marginBottom: "8px" }}>Champion</div>
+              <div style={{ fontSize: "2.4rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.1 }}>{winners.champion.team}</div>
+              <div style={{ fontSize: "0.95rem", marginTop: "8px" }}>Project: <strong>{winners.champion.project}</strong></div>
+              <div style={{ fontSize: "0.8rem", marginTop: "10px", opacity: 0.75 }}>{winners.champion.prize} + Certificate</div>
+            </div>
+            <div className="prize-third">
+              <div style={{ fontSize: "2rem", marginBottom: "12px" }} aria-hidden="true">🥉</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#1a1f6e", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>2nd Runner-up</div>
+              <div style={{ fontSize: "1.8rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.02em", lineHeight: 1.15 }}>{winners.secondRunnerUp.team}</div>
+              <div style={{ fontSize: "0.9rem", color: "#555", marginTop: "6px" }}>Project: <strong style={{ color: "#1a1f6e" }}>{winners.secondRunnerUp.project}</strong></div>
+              <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>{winners.secondRunnerUp.prize} + Certificate</div>
+            </div>
+          </div>
+          <div className="prizes-extra">
+            <div style={{ flex: 1, background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "24px", textAlign: "center" }}>
+              <div style={{ fontSize: "1.6rem", marginBottom: "8px" }} aria-hidden="true">❤️</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#009999", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "6px" }}>People&apos;s Choice Award</div>
+              <div style={{ fontWeight: 800, color: "#1a1f6e", fontSize: "1.2rem" }}>{winners.peoplesChoice.team}</div>
+              <div style={{ fontSize: "0.85rem", color: "#666", marginTop: "4px" }}>{winners.peoplesChoice.project} · {winners.peoplesChoice.prize}</div>
             </div>
           </div>
         </div>
@@ -878,52 +805,6 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── PRIZES ── */}
-      <section id="prizes" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
-        <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto">
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span className="section-eyebrow">Prizes & Recognition</span>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
-              Win Big, Build Bigger
-            </h2>
-          </div>
-          <div className="prizes-podium">
-            <div className="prize-runner">
-              <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🥈</div>
-              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#009999", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>1st Runner-up</div>
-              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>RM 900</div>
-              <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>+ Certificate</div>
-            </div>
-            <div className="prize-first">
-              <div style={{ fontSize: "2.4rem", marginBottom: "14px" }}>🏆</div>
-              <div style={{ fontSize: "0.68rem", fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.75, marginBottom: "8px" }}>Champion</div>
-              <div style={{ fontSize: "3.2rem", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1 }}>RM 1,200</div>
-              <div style={{ fontSize: "0.8rem", marginTop: "10px", opacity: 0.75 }}>+ Plaque + Certificate</div>
-            </div>
-            <div className="prize-third">
-              <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🥉</div>
-              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#1a1f6e", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>2nd Runner-up</div>
-              <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "#1a1f6e", letterSpacing: "-0.03em" }}>RM 600</div>
-              <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "8px" }}>+ Certificate</div>
-            </div>
-          </div>
-          <div className="prizes-extra">
-            <div style={{ flex: 1, background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "24px", textAlign: "center" }}>
-              <div style={{ fontSize: "1.6rem", marginBottom: "8px" }}>❤️</div>
-              <div style={{ fontWeight: 700, color: "#1a1f6e", marginBottom: "4px" }}>People&apos;s Choice Award</div>
-              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#009999" }}>RM 200</div>
-            </div>
-            <div style={{ flex: 2, background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "24px", display: "flex", alignItems: "center", gap: "16px" }}>
-              <div style={{ fontSize: "2rem" }}>📜</div>
-              <div>
-                <div style={{ fontWeight: 700, color: "#1a1f6e", marginBottom: "4px" }}>Certificate of Participation</div>
-                <div style={{ fontSize: "0.85rem", color: "#666" }}>Awarded to all teams who complete the full hackathon cycle</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── ROADMAP ── */}
       <section id="roadmap" style={{ padding: "96px 24px", overflow: "hidden" }}>
         <div style={{ textAlign: "center", marginBottom: "56px" }}>
@@ -963,7 +844,7 @@ export default function Page() {
               Meet the Grand Finalists
             </h2>
             <p style={{ color: "#666", maxWidth: "560px", margin: "16px auto 0", lineHeight: 1.75 }}>
-              Congratulations to the 10 teams advancing to the Grand Finale. See them pitch live at Nadi@UTP on 14 November 2026.
+              Congratulations to the 10 teams who made it to the Grand Finale and pitched live at Nadi@UTP on 14 November 2026.
             </p>
           </div>
           <div className="finalists-grid">
@@ -977,16 +858,30 @@ export default function Page() {
         </div>
       </section>
 
+      {/* ── JUDGING RESULTS CTA ── */}
+      <section id="results" style={{ padding: "0 24px 96px" }}>
+        <div className="max-w-6xl mx-auto">
+          <div style={{ background: "#f0fdfb", border: "1.5px solid #b2eee9", borderRadius: "20px", padding: "clamp(32px, 5vw, 48px) clamp(20px, 5vw, 48px)", textAlign: "center" }}>
+            <span className="section-eyebrow">Judging Results</span>
+            <h2 className="section-heading">Check Your Team&apos;s Results</h2>
+            <p style={{ color: "#666", maxWidth: "560px", margin: "0 auto 28px", lineHeight: 1.75 }}>
+              Every judge&apos;s scoresheet from the Preliminary Round, plus the Grand Finale for finalists. Pick your team and enter any team member&apos;s full name to open your folder.
+            </p>
+            <Link href="/results" className="btn-primary">View Judging Results →</Link>
+          </div>
+        </div>
+      </section>
+
       {/* ── VENUE / GETTING THERE ── */}
       <section id="venue" style={{ background: "#f0fdfb", padding: "96px 24px" }}>
         <div className="max-w-6xl mx-auto">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <span className="section-eyebrow">Grand Finale · Saturday, 14 November 2026</span>
             <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1f6e", letterSpacing: "-0.02em" }}>
-              Getting to Nadi@UTP
+              Held at Nadi@UTP
             </h2>
             <p style={{ color: "#666", maxWidth: "560px", margin: "16px auto 0", lineHeight: 1.75 }}>
-              The Grand Finale is held in person at Nadi@UTP, Universiti Teknologi PETRONAS. Watch the short walkthrough below so you know exactly where to go on the day.
+              The Grand Finale was held in person at Nadi@UTP, Universiti Teknologi PETRONAS. Here is the venue walkthrough and how the day was planned.
             </p>
           </div>
 
@@ -1007,8 +902,8 @@ export default function Page() {
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {[
                 { icon: "📍", label: "Venue", value: "Nadi@UTP, Universiti Teknologi PETRONAS", sub: "32610 Bandar Seri Iskandar, Perak" },
-                { icon: "📅", label: "Date", value: "Saturday, 14 November 2026", sub: "Finalists arrive from 9:00 AM" },
-                { icon: "🎟️", label: "Public Exhibition", value: "Open to all students & visitors", sub: "Live demos at the finalist booths" },
+                { icon: "📅", label: "Date", value: "Saturday, 14 November 2026", sub: "Finalists arrived from 9:00 AM" },
+                { icon: "🎟️", label: "Public Exhibition", value: "Open to all students & visitors", sub: "Visitors saw live demos at the finalist booths" },
               ].map(({ icon, label, value, sub }) => (
                 <div key={label} style={{ background: "#fff", border: "1px solid #b2eee9", borderRadius: "14px", padding: "18px 20px", display: "flex", gap: "14px", alignItems: "flex-start" }}>
                   <div style={{ fontSize: "1.5rem", lineHeight: 1 }}>{icon}</div>
@@ -1029,7 +924,7 @@ export default function Page() {
           {/* Tentative programme */}
           <div style={{ marginTop: "64px" }}>
             <h3 style={{ textAlign: "center", fontSize: "1.3rem", fontWeight: 800, color: "#1a1f6e", marginBottom: "6px" }}>Finale Day Programme</h3>
-            <p style={{ textAlign: "center", fontSize: "0.82rem", color: "#888", marginBottom: "28px" }}>Tentative and subject to change</p>
+            <p style={{ textAlign: "center", fontSize: "0.82rem", color: "#888", marginBottom: "28px" }}>The planned programme for the day</p>
             <div className="schedule-grid">
               {finaleSchedule.map((item) => (
                 <div key={item.time} style={{ background: "#fff", border: "1px solid #d0f5f0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "14px" }}>
@@ -1052,20 +947,20 @@ export default function Page() {
         </div>
         <div className="max-w-3xl mx-auto" style={{ textAlign: "center", position: "relative", zIndex: 2 }}>
           <span style={{ display: "inline-block", background: "rgba(26,31,110,0.2)", color: "#fff", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", padding: "6px 14px", borderRadius: "100px", marginBottom: "20px", border: "1px solid rgba(255,255,255,0.3)" }}>
-            Registration Closed · Finale on 14 November 2026
+            Grand Finale · 14 November 2026
           </span>
           <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", marginBottom: "16px", lineHeight: 1.15 }}>
-            See You at the<br />Grand Finale
+            Thank You for an<br />Amazing Grand Finale
           </h2>
           <p style={{ color: "rgba(255,255,255,0.85)", lineHeight: 1.75, fontSize: "1.05rem", maxWidth: "520px", margin: "0 auto 40px" }}>
-            Watch the finalists pitch live, explore their booths and celebrate the winners with us at Nadi@UTP, Universiti Teknologi PETRONAS.
+            Thank you to every team, judge, sponsor and visitor who joined us at Nadi@UTP. Teams can now check their judging results.
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="#venue" style={{ background: "#1a1f6e", color: "#fff", padding: "14px 36px", borderRadius: "8px", fontWeight: 800, fontSize: "1rem", textDecoration: "none", transition: "background 0.2s", display: "inline-block" }}
+            <Link href="/results" style={{ background: "#1a1f6e", color: "#fff", padding: "14px 36px", borderRadius: "8px", fontWeight: 800, fontSize: "1rem", textDecoration: "none", transition: "background 0.2s", display: "inline-block" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#243040")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1f6e")}>
-              How to Get There
-            </a>
+              Check Your Results
+            </Link>
           </div>
         </div>
       </section>
@@ -1101,74 +996,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer style={{ background: "#0a2a2a", color: "#fff", padding: "56px 24px 32px" }}>
-        <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto">
-          <div className="footer-grid">
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
-                <Image src="/logo.png" alt="CodeFest '26 Logo" width={40} height={40} style={{ filter: "brightness(0) invert(1)" }} />
-                <span style={{ fontWeight: 900, fontSize: "1.1rem", fontFamily: "'Mokoto', monospace" }}>
-                  CODEFEST <span style={{ color: "#00e5a0" }}>&apos;26</span>
-                </span>
-              </div>
-              <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.75, fontSize: "0.875rem", maxWidth: "280px" }}>
-                Innovating for the People, by the People. A national-level coding competition by SYNTECH Organization at UTP.
-              </p>
-              {/* Social links */}
-              <div style={{ display: "flex", alignItems: "center", gap: "16px", marginTop: "20px" }}>
-                {/* CodeFest IG */}
-                <a href="https://www.instagram.com/codefestsyntech?igsh=emNhNG9xNTJreWNh" target="_blank" rel="noopener noreferrer" title="CodeFest Instagram" style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.6)", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#E1306C")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.1 4.1 0 011.522.99 4.1 4.1 0 01.99 1.522c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.1 4.1 0 01-.99 1.522 4.1 4.1 0 01-1.522.99c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.1 4.1 0 01-1.522-.99 4.1 4.1 0 01-.99-1.522c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.1 4.1 0 01.99-1.522 4.1 4.1 0 011.522-.99c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a6.27 6.27 0 00-2.265 1.474A6.27 6.27 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a6.27 6.27 0 001.474 2.265 6.27 6.27 0 002.265 1.474c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a6.27 6.27 0 002.265-1.474 6.27 6.27 0 001.474-2.265c.297-.762.5-1.635.558-2.913C23.986 15.667 24 15.259 24 12s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a6.27 6.27 0 00-1.474-2.265A6.27 6.27 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z" />
-                  </svg>
-                  <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>utp_codefest</span>
-                </a>
-                {/* SYNTECH IG */}
-                <a href="https://www.instagram.com/utpsyntech?igsh=MTFvbzlnOXNxeXZzMQ==" target="_blank" rel="noopener noreferrer" title="SYNTECH Instagram" style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.6)", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#E1306C")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.1 4.1 0 011.522.99 4.1 4.1 0 01.99 1.522c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.1 4.1 0 01-.99 1.522 4.1 4.1 0 01-1.522.99c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.1 4.1 0 01-1.522-.99 4.1 4.1 0 01-.99-1.522c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.1 4.1 0 01.99-1.522 4.1 4.1 0 011.522-.99c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a6.27 6.27 0 00-2.265 1.474A6.27 6.27 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a6.27 6.27 0 001.474 2.265 6.27 6.27 0 002.265 1.474c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a6.27 6.27 0 002.265-1.474 6.27 6.27 0 001.474-2.265c.297-.762.5-1.635.558-2.913C23.986 15.667 24 15.259 24 12s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a6.27 6.27 0 00-1.474-2.265A6.27 6.27 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z" />
-                  </svg>
-                  <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>utpsyntech</span>
-                </a>
-                {/* SYNTECH LinkedIn */}
-                <a href="https://www.linkedin.com/company/syntech-organization/" target="_blank" rel="noopener noreferrer" title="SYNTECH LinkedIn" style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.6)", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#0A66C2")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                  <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>UTP SYNTECH Organisation</span>
-                </a>
-              </div>
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.45, marginBottom: "16px" }}>Quick Links</div>
-              {NAV_LINKS.map((link) => (
-                <a key={link} href={`#${link.toLowerCase()}`} style={{ display: "block", color: "rgba(255,255,255,0.55)", textDecoration: "none", marginBottom: "10px", fontSize: "0.875rem", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#00e5a0")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}>
-                  {link}
-                </a>
-              ))}
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.45, marginBottom: "16px" }}>Organisers</div>
-              {["SYNTECH Organization", "Department of Computing (DC)", "Student Affairs (SA)", "YUTP"].map((org) => (
-                <div key={org} style={{ color: "rgba(255,255,255,0.55)", marginBottom: "10px", fontSize: "0.875rem" }}>{org}</div>
-              ))}
-            </div>
-          </div>
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "24px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.78rem" }}>© 2026 CodeFest &apos;26 · SYNTECH Organization · Universiti Teknologi PETRONAS</div>
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.78rem" }}>32610 Bandar Seri Iskandar, Perak, Malaysia</div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter home />
     </>
   );
 }
